@@ -1,0 +1,4 @@
+{"name": "hello-world",
+ "description": "基础问候插件模板",
+ "rpc": ["hello"],
+ "version": "1.0.0"}

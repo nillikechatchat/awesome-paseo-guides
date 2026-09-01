@@ -1,0 +1,910 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Paseo Guides - 智能代理编排平台</title>
+<style>
+:root {
+  --bg: #0f0f13;
+  --bg2: #1a1a24;
+  --bg3: #24243a;
+  --accent: #7c6ff7;
+  --accent2: #5b9cf5;
+  --accent3: #36d6b6;
+  --text: #e8e8f0;
+  --text2: #9898b0;
+  --border: #2a2a40;
+  --card: #14141f;
+  --radius: 12px;
+  --font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --mono: 'JetBrains Mono', 'Fira Code', monospace;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: var(--font);
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.7;
+  overflow-x: hidden;
+}
+
+/* ===== Navigation ===== */
+.nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 1000;
+  padding: 16px 40px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  backdrop-filter: blur(20px);
+  background: rgba(15,15,19,0.85);
+  border-bottom: 1px solid var(--border);
+  transition: all 0.3s;
+}
+.nav-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 20px;
+  font-weight: 700;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.nav-logo svg { width: 28px; height: 28px; }
+.nav-links { display: flex; gap: 28px; list-style: none; }
+.nav-links a {
+  color: var(--text2);
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+  transition: color 0.2s;
+  position: relative;
+}
+.nav-links a:hover { color: var(--text); }
+.nav-links a::after {
+  content: '';
+  position: absolute;
+  bottom: -4px; left: 0;
+  width: 0; height: 2px;
+  background: var(--accent);
+  transition: width 0.3s;
+}
+.nav-links a:hover::after { width: 100%; }
+
+.nav-toggle { display: none; cursor: pointer; background: none; border: none; color: var(--text); font-size: 24px; }
+
+/* ===== Hero ===== */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 120px 40px 80px;
+  position: relative;
+  overflow: hidden;
+}
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -50%; left: -50%;
+  width: 200%; height: 200%;
+  background: radial-gradient(ellipse at 50% 0%, rgba(124,111,247,0.15) 0%, transparent 60%),
+              radial-gradient(ellipse at 80% 50%, rgba(54,214,182,0.08) 0%, transparent 50%),
+              radial-gradient(ellipse at 20% 80%, rgba(91,156,245,0.08) 0%, transparent 50%);
+  animation: pulse 8s ease-in-out infinite;
+}
+@keyframes pulse {
+  0%, 100% { opacity: 0.8; }
+  50% { opacity: 1; }
+}
+.hero-content { position: relative; z-index: 1; max-width: 800px; }
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 16px;
+  border-radius: 20px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  font-size: 13px;
+  color: var(--accent2);
+  margin-bottom: 24px;
+  font-weight: 500;
+}
+.hero-badge .dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: var(--accent3);
+  animation: blink 2s infinite;
+}
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+.hero h1 {
+  font-size: clamp(36px, 6vw, 64px);
+  font-weight: 800;
+  line-height: 1.1;
+  margin-bottom: 20px;
+  letter-spacing: -0.02em;
+}
+.hero h1 .gradient {
+  background: linear-gradient(135deg, var(--accent), var(--accent2), var(--accent3));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-size: 200% 200%;
+  animation: shift 4s ease-in-out infinite;
+}
+@keyframes shift {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+.hero p {
+  font-size: 18px;
+  color: var(--text2);
+  max-width: 600px;
+  margin: 0 auto 40px;
+}
+.hero-actions { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+.btn {
+  padding: 12px 28px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.25s;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border: none;
+}
+.btn-primary {
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  color: #fff;
+  box-shadow: 0 4px 20px rgba(124,111,247,0.3);
+}
+.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 6px 30px rgba(124,111,247,0.5); }
+.btn-secondary {
+  background: var(--bg2);
+  color: var(--text);
+  border: 1px solid var(--border);
+}
+.btn-secondary:hover { border-color: var(--accent); background: var(--bg3); }
+
+/* Hero visual */
+.hero-visual {
+  margin-top: 60px;
+  width: 100%;
+  max-width: 700px;
+  position: relative;
+  z-index: 1;
+}
+.hero-visual pre {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 24px 28px;
+  font-family: var(--mono);
+  font-size: 14px;
+  line-height: 1.8;
+  text-align: left;
+  overflow-x: auto;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+}
+.code-line { display: block; }
+.code-cmd { color: var(--accent3); }
+.code-flag { color: var(--accent2); }
+.code-comment { color: var(--text2); font-style: italic; }
+.code-output { color: var(--text2); }
+.code-accent { color: var(--accent); }
+.code-type { color: #f7a440; }
+
+/* ===== Section base ===== */
+section {
+  padding: 100px 40px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+.section-header {
+  text-align: center;
+  margin-bottom: 60px;
+}
+.section-header h2 {
+  font-size: clamp(28px, 4vw, 40px);
+  font-weight: 700;
+  margin-bottom: 14px;
+}
+.section-header p {
+  color: var(--text2);
+  font-size: 16px;
+  max-width: 600px;
+  margin: 0 auto;
+}
+.section-tag {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 6px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  font-size: 12px;
+  color: var(--accent);
+  font-weight: 600;
+  margin-bottom: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* ===== Features Grid ===== */
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
+}
+.feature-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 28px;
+  transition: all 0.3s;
+  position: relative;
+  overflow: hidden;
+}
+.feature-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+.feature-card:hover { border-color: var(--accent); transform: translateY(-4px); }
+.feature-card:hover::before { opacity: 1; }
+.feature-icon {
+  width: 48px; height: 48px;
+  border-radius: 10px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 16px;
+  font-size: 22px;
+}
+.feature-card h3 { font-size: 18px; font-weight: 600; margin-bottom: 8px; }
+.feature-card p { color: var(--text2); font-size: 14px; line-height: 1.6; }
+.feature-tag {
+  display: inline-block;
+  margin-top: 14px;
+  padding: 3px 10px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 600;
+  background: rgba(124,111,247,0.15);
+  color: var(--accent);
+}
+
+/* ===== Tutorials ===== */
+.tutorials-list { display: flex; flex-direction: column; gap: 16px; }
+.tutorial-item {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 24px 28px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  transition: all 0.3s;
+  cursor: pointer;
+}
+.tutorial-item:hover { border-color: var(--accent); transform: translateX(4px); }
+.tutorial-num {
+  font-size: 28px;
+  font-weight: 800;
+  color: var(--accent);
+  min-width: 50px;
+  font-family: var(--mono);
+}
+.tutorial-content { flex: 1; }
+.tutorial-content h3 { font-size: 16px; font-weight: 600; margin-bottom: 4px; }
+.tutorial-content p { color: var(--text2); font-size: 13px; }
+.tutorial-meta {
+  display: flex;
+  gap: 12px;
+  margin-top: 8px;
+}
+.tutorial-meta span {
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 4px;
+  background: var(--bg2);
+  color: var(--text2);
+  font-weight: 500;
+}
+.tutorial-arrow {
+  color: var(--text2);
+  font-size: 20px;
+  transition: transform 0.2s, color 0.2s;
+}
+.tutorial-item:hover .tutorial-arrow { transform: translateX(4px); color: var(--accent); }
+
+/* ===== Plugins ===== */
+.plugins-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+  gap: 20px;
+}
+.plugin-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 28px;
+  transition: all 0.3s;
+}
+.plugin-card:hover { border-color: var(--accent2); transform: translateY(-3px); }
+.plugin-card h3 { font-size: 17px; font-weight: 600; margin-bottom: 6px; display: flex; align-items: center; gap: 10px; }
+.plugin-card p { color: var(--text2); font-size: 13px; margin-bottom: 16px; }
+.plugin-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 16px; }
+.plugin-tag {
+  padding: 3px 10px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 500;
+  background: var(--bg2);
+  color: var(--text2);
+  border: 1px solid var(--border);
+}
+.plugin-code {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 16px;
+  font-family: var(--mono);
+  font-size: 12px;
+  line-height: 1.7;
+  overflow-x: auto;
+  color: var(--text2);
+}
+.plugin-code .k { color: var(--accent); }
+.plugin-code .s { color: var(--accent3); }
+.plugin-code .n { color: var(--accent2); }
+
+/* ===== Experiences ===== */
+.experiences-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
+}
+.exp-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 28px;
+  transition: all 0.3s;
+}
+.exp-card:hover { border-color: var(--accent3); transform: translateY(-3px); }
+.exp-card .quote {
+  font-size: 14px;
+  color: var(--text2);
+  line-height: 1.8;
+  margin-bottom: 16px;
+  position: relative;
+  padding-left: 20px;
+  border-left: 2px solid var(--accent3);
+  font-style: italic;
+}
+.exp-card .author {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.exp-card .avatar {
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent), var(--accent3));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: 700;
+  color: #fff;
+}
+.exp-card .author-info { flex: 1; }
+.exp-card .author-name { font-size: 13px; font-weight: 600; }
+.exp-card .author-role { font-size: 11px; color: var(--text2); }
+.exp-card .exp-tags { display: flex; gap: 6px; margin-top: 14px; flex-wrap: wrap; }
+
+/* ===== Quick Start ===== */
+.quickstart {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 40px;
+  margin-top: 40px;
+}
+.quickstart h3 { font-size: 20px; font-weight: 700; margin-bottom: 20px; }
+.qs-steps { display: flex; flex-direction: column; gap: 20px; }
+.qs-step {
+  display: flex;
+  gap: 16px;
+  padding: 16px;
+  background: var(--bg);
+  border-radius: 8px;
+  border: 1px solid var(--border);
+}
+.qs-step-num {
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 700;
+  color: #fff;
+  flex-shrink: 0;
+}
+.qs-step-content { flex: 1; }
+.qs-step-content h4 { font-size: 14px; font-weight: 600; margin-bottom: 6px; }
+.qs-step-content code {
+  font-family: var(--mono);
+  font-size: 13px;
+  background: var(--bg2);
+  padding: 8px 12px;
+  border-radius: 6px;
+  display: block;
+  color: var(--text);
+  border: 1px solid var(--border);
+  margin-top: 8px;
+}
+
+/* ===== Footer ===== */
+.footer {
+  text-align: center;
+  padding: 40px;
+  border-top: 1px solid var(--border);
+  color: var(--text2);
+  font-size: 13px;
+}
+.footer a { color: var(--accent); text-decoration: none; }
+.footer a:hover { text-decoration: underline; }
+
+/* ===== Responsive ===== */
+@media (max-width: 768px) {
+  .nav { padding: 14px 20px; }
+  .nav-links { display: none; }
+  .nav-toggle { display: block; }
+  section { padding: 60px 20px; }
+  .hero { padding: 100px 20px 60px; }
+  .hero h1 { font-size: 32px; }
+  .hero p { font-size: 15px; }
+  .hero-visual pre { font-size: 12px; padding: 16px; }
+  .features-grid { grid-template-columns: 1fr; }
+  .plugins-grid { grid-template-columns: 1fr; }
+  .experiences-grid { grid-template-columns: 1fr; }
+  .qs-step { flex-direction: column; }
+  .quickstart { padding: 24px; }
+}
+
+/* ===== Scroll animations ===== */
+.fade-in {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+.fade-in.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+</style>
+</head>
+<body>
+
+<!-- Navigation -->
+<nav class="nav">
+  <div class="nav-logo">
+    <svg viewBox="0 0 24 24" fill="none">
+      <circle cx="12" cy="12" r="10" stroke="url(#g1)" stroke-width="2"/>
+      <circle cx="12" cy="12" r="4" fill="url(#g1)"/>
+      <defs><linearGradient id="g1" x1="0" y1="0" x2="24" y2="24"><stop offset="0%" stop-color="#7c6ff7"/><stop offset="100%" stop-color="#36d6b6"/></linearGradient></defs>
+    </svg>
+    Paseo Guides
+  </div>
+  <ul class="nav-links">
+    <li><a href="#features">功能</a></li>
+    <li><a href="#tutorials">教程</a></li>
+    <li><a href="#plugins">插件</a></li>
+    <li><a href="#experiences">心得</a></li>
+    <li><a href="#quickstart">快速开始</a></li>
+  </ul>
+  <button class="nav-toggle" onclick="document.querySelector('.nav-links').classList.toggle('mobile-open')">&#9776;</button>
+</nav>
+
+<!-- Hero Section -->
+<section class="hero" id="hero">
+  <div class="hero-content">
+    <div class="hero-badge">
+      <span class="dot"></span>
+      社区驱动 · 持续更新
+    </div>
+    <h1>掌握 <span class="gradient">Paseo</span><br>智能代理编排平台</h1>
+    <p>从零开始学习 Paseo 代理管理、工作区编排、定时任务调度与插件开发，分享社区实践经验与最佳用法。</p>
+    <div class="hero-actions">
+      <a href="#quickstart" class="btn btn-primary">快速上手 &#8594;</a>
+      <a href="#tutorials" class="btn btn-secondary">浏览教程</a>
+    </div>
+  </div>
+  <div class="hero-visual">
+    <pre><span class="code-line"><span class="code-comment"># 一行命令创建智能代理</span></span><span class="code-line"><span class="code-cmd">paseo</span> <span class="code-flag">run</span> <span class="code-flag">--provider</span> <span class="code-accent">codex/gpt-5.4</span> <span class="code-flag">--workspace</span> <span class="code-accent">&lt;id&gt;</span> <span class="code-flag">"分析这个仓库的结构并生成报告"</span></span><span class="code-line"></span><span class="code-line"><span class="code-comment"># 结果</span></span><span class="code-line"><span class="code-output">✓ Agent #a3f2 created &amp; started</span></span><span class="code-line"><span class="code-output">✓ Workspace ws-01 mounted (worktree)</span></span><span class="code-line"><span class="code-output">✓ Notifying on finish...</span></span></pre>
+  </div>
+</section>
+
+<!-- Features Section -->
+<section id="features">
+  <div class="section-header fade-in">
+    <span class="section-tag">Core Capabilities</span>
+    <h2>核心能力概览</h2>
+    <p>Paseo 是一套完整的远程代理管理基础设施，覆盖从任务执行到定期编排的全生命周期</p>
+  </div>
+  <div class="features-grid">
+    <div class="feature-card fade-in">
+      <div class="feature-icon">&#9889;</div>
+      <h3>智能代理 (Agents)</h3>
+      <p>创建、调度、管理多代理协作。支持不同 LLM 提供商，通过 Prompt 定义任务并异步追踪结果。</p>
+      <span class="feature-tag">MCP / CLI</span>
+    </div>
+    <div class="feature-card fade-in">
+      <div class="feature-icon">&#128202;</div>
+      <h3>工作区 (Workspaces)</h3>
+      <p>基于本地目录或 git worktree 的隔离环境。支持 branch-off / checkout-branch / checkout-pr 模式。</p>
+      <span class="feature-tag">隔离执行</span>
+    </div>
+    <div class="feature-card fade-in">
+      <div class="feature-icon">&#9201;</div>
+      <h3>定时任务 (Schedules)</h3>
+      <p>基于 cron 表达式的定时调度，周期性自动启动新代理执行任务，支持暂停、恢复和一次性触发。</p>
+      <span class="feature-tag">Cron</span>
+    </div>
+    <div class="feature-card fade-in">
+      <div class="feature-icon">&#128155;</div>
+      <h3>心跳提醒 (Heartbeats)</h3>
+      <p>定时向你发送提醒消息，适合 PR 检查、构建监控、状态轮询等需要回传到对话的场景。</p>
+      <span class="feature-tag">推送通知</span>
+    </div>
+    <div class="feature-card fade-in">
+      <div class="feature-icon">&#128268;</div>
+      <h3>插件系统 (Plugins)</h3>
+      <p>通过 paseo.json 配置可扩展能力，自定义 workspace 脚本生命周期，集成第三方工具链。</p>
+      <span class="feature-tag">可扩展</span>
+    </div>
+    <div class="feature-card fade-in">
+      <div class="feature-icon">&#128269;</div>
+      <h3>终端管理 (Terminals)</h3>
+      <p>远程终端会话管理，支持长驻进程、实时交互，与 workspace script 深度集成。</p>
+      <span class="feature-tag">远程 Shell</span>
+    </div>
+  </div>
+</section>
+
+<!-- Tutorials Section -->
+<section id="tutorials">
+  <div class="section-header fade-in">
+    <span class="section-tag">Learn</span>
+    <h2>教程系列</h2>
+    <p>从入门到进阶，系统学习 Paseo 的各项能力</p>
+  </div>
+  <div class="tutorials-list">
+    <div class="tutorial-item fade-in">
+      <div class="tutorial-num">01</div>
+      <div class="tutorial-content">
+        <h3>快速开始：创建你的第一个代理</h3>
+        <p>安装 Paseo CLI，配置 Provider，运行第一个智能代理任务</p>
+        <div class="tutorial-meta"><span>入门</span><span>10 分钟</span><span>CLI</span></div>
+      </div>
+      <div class="tutorial-arrow">&#8594;</div>
+    </div>
+    <div class="tutorial-item fade-in">
+      <div class="tutorial-num">02</div>
+      <div class="tutorial-content">
+        <h3>工作区编排：管理代码执行环境</h3>
+        <p>创建本地 / worktree 工作区，理解隔离模式和生命周期</p>
+        <div class="tutorial-meta"><span>入门</span><span>15 分钟</span><span>Workspaces</span></div>
+      </div>
+      <div class="tutorial-arrow">&#8594;</div>
+    </div>
+    <div class="tutorial-item fade-in">
+      <div class="tutorial-num">03</div>
+      <div class="tutorial-content">
+        <h3>多代理协作与任务委派</h3>
+        <p>创建子代理，发送后续指令，实现复杂任务的分解与协作</p>
+        <div class="tutorial-meta"><span>进阶</span><span>20 分钟</span><span>Agents</span></div>
+      </div>
+      <div class="tutorial-arrow">&#8594;</div>
+    </div>
+    <div class="tutorial-item fade-in">
+      <div class="tutorial-num">04</div>
+      <div class="tutorial-content">
+        <h3>定时任务与心跳配置</h3>
+        <p>使用 cron 表达式配置 Schedule 和 Heartbeat，实现自动化运维</p>
+        <div class="tutorial-meta"><span>进阶</span><span>15 分钟</span><span>Schedules</span></div>
+      </div>
+      <div class="tutorial-arrow">&#8594;</div>
+    </div>
+    <div class="tutorial-item fade-in">
+      <div class="tutorial-num">05</div>
+      <div class="tutorial-content">
+        <h3>Workspace 脚本与插件开发</h3>
+        <p>配置 paseo.json 脚本，构建可复用的 workspace 能力</p>
+        <div class="tutorial-meta"><span>高级</span><span>25 分钟</span><span>Plugins</span></div>
+      </div>
+      <div class="tutorial-arrow">&#8594;</div>
+    </div>
+    <div class="tutorial-item fade-in">
+      <div class="tutorial-num">06</div>
+      <div class="tutorial-content">
+        <h3>Provider 配置与模型选择策略</h3>
+        <p>深入了解 Agent Profiles、Provider Discovery 和模型能力检查</p>
+        <div class="tutorial-meta"><span>高级</span><span>20 分钟</span><span>Providers</span></div>
+      </div>
+      <div class="tutorial-arrow">&#8594;</div>
+    </div>
+  </div>
+</section>
+
+<!-- Plugins Section -->
+<section id="plugins">
+  <div class="section-header fade-in">
+    <span class="section-tag">Build</span>
+    <h2>插件示例</h2>
+    <p>展示 Paseo 插件和 workspace 脚本的配置方式</p>
+  </div>
+  <div class="plugins-grid">
+    <div class="plugin-card fade-in">
+      <h3>&#127775; Hello World Plugin</h3>
+      <p>最基础的 Paseo 插件模板，展示 paseo.json 配置和 RPC 定义</p>
+      <div class="plugin-tags">
+        <span class="plugin-tag">template</span>
+        <span class="plugin-tag">paseo.json</span>
+        <span class="plugin-tag">MCP</span>
+      </div>
+      <div class="plugin-code"><span class="k">{"name"</span>: <span class="s">"hello-world"</span>,
+  <span class="k">"description"</span>: <span class="s">"基础问候插件"</span>,
+  <span class="k">"rpc"</span>: [<span class="s">"hello"</span>],
+  <span class="k">"version"</span>: <span class="s">"1.0.0"</span>}</div>
+    </div>
+    <div class="plugin-card fade-in">
+      <h3>&#128221; Logger Plugin</h3>
+      <p>日志记录插件，展示如何在工作区中记录代理活动</p>
+      <div class="plugin-tags">
+        <span class="plugin-tag">logging</span>
+        <span class="plugin-tag">workspace</span>
+        <span class="plugin-tag">monitoring</span>
+      </div>
+      <div class="plugin-code"><span class="k">{"name"</span>: <span class="s">"logger"</span>,
+  <span class="k">"description"</span>: <span class="s">"代理日志记录"</span>,
+  <span class="k">"scripts"</span>: {
+    <span class="k">"log"</span>: <span class="s">"node logger.js"</span>
+  },
+  <span class="k">"version"</span>: <span class="s">"1.0.0"</span>}</div>
+    </div>
+    <div class="plugin-card fade-in">
+      <h3>&#9889; DevOps Runner</h3>
+      <p>DevOps 任务插件，自动化 CI/CD 步骤执行</p>
+      <div class="plugin-tags">
+        <span class="plugin-tag">devops</span>
+        <span class="plugin-tag">ci/cd</span>
+        <span class="plugin-tag">automation</span>
+      </div>
+      <div class="plugin-code"><span class="k">{"name"</span>: <span class="s">"devops-runner"</span>,
+  <span class="k">"description"</span>: <span class="s">"DevOps 自动化"</span>,
+  <span class="k">"rpc"</span>: [<span class="s">"deploy"</span>, <span class="s">"build"</span>],
+  <span class="k">"version"</span>: <span class="s">"1.0.0"</span>}</div>
+    </div>
+  </div>
+</section>
+
+<!-- Experiences Section -->
+<section id="experiences">
+  <div class="section-header fade-in">
+    <span class="section-tag">Community</span>
+    <h2>实践心得</h2>
+    <p>来自社区的真实使用经验与最佳实践分享</p>
+  </div>
+  <div class="experiences-grid">
+    <div class="exp-card fade-in">
+      <div class="quote">"用 Paseo 做 PR 自动审阅后，代码质量明显提升。最爽的是可以设置 heartbeat，在 build 失败时主动通知我，不用一直盯着。"</div>
+      <div class="author">
+        <div class="avatar">Z</div>
+        <div class="author-info">
+          <div class="author-name">张明</div>
+          <div class="author-role">后端工程师 · 1 年经验</div>
+        </div>
+      </div>
+      <div class="exp-tags">
+        <span class="plugin-tag">PR 审阅</span>
+        <span class="plugin-tag">Heartbeat</span>
+      </div>
+    </div>
+    <div class="exp-card fade-in">
+      <div class="quote">"多代理协作真的改变了我的工作流。我把一个复杂重构拆成 3 个子代理并行执行，比自己手动做快了一倍还不止。"</div>
+      <div class="author">
+        <div class="avatar">L</div>
+        <div class="author-info">
+          <div class="author-name">李婷</div>
+          <div class="author-role">全栈工程师 · 2 年经验</div>
+        </div>
+      </div>
+      <div class="exp-tags">
+        <span class="plugin-tag">多代理</span>
+        <span class="plugin-tag">并行执行</span>
+      </div>
+    </div>
+    <div class="exp-card fade-in">
+      <div class="quote">"定时 Schedule 是我最喜欢的功能。每天早上自动运行代码审计，每周生成技术债报告。把重复工作完全自动化了。"</div>
+      <div class="author">
+        <div class="avatar">W</div>
+        <div class="author-info">
+          <div class="author-name">王浩</div>
+          <div class="author-role">技术负责人 · 3 年经验</div>
+        </div>
+      </div>
+      <div class="exp-tags">
+        <span class="plugin-tag">Schedule</span>
+        <span class="plugin-tag">自动化</span>
+      </div>
+    </div>
+    <div class="exp-card fade-in">
+      <div class="quote">"第一次用时候担心工作区隔离问题，其实 worktree 模式非常稳，每个任务独立分支，不会影响主开发线。"</div>
+      <div class="author">
+        <div class="avatar">C</div>
+        <div class="author-info">
+          <div class="author-name">陈晨</div>
+          <div class="author-role">DevOps · 1.5 年经验</div>
+        </div>
+      </div>
+      <div class="exp-tags">
+        <span class="plugin-tag">Worktree</span>
+        <span class="plugin-tag">隔离</span>
+      </div>
+    </div>
+    <div class="exp-card fade-in">
+      <div class="quote">"Provider 切换很方便，同一个 prompt 可以跑不同的模型对比效果。调试时切 fast_mode 速度提升明显。"</div>
+      <div class="author">
+        <div class="avatar">S</div>
+        <div class="author-info">
+          <div class="author-name">孙悦</div>
+          <div class="author-role">AI 工程师 · 1 年经验</div>
+        </div>
+      </div>
+      <div class="exp-tags">
+        <span class="plugin-tag">Provider</span>
+        <span class="plugin-tag">模型对比</span>
+      </div>
+    </div>
+    <div class="exp-card fade-in">
+      <div class="quote">"最大的心得是学会异步工作流，不再轮询等待。通知到了自然知道结果，把等待时间用来处理别的事情。"</div>
+      <div class="author">
+        <div class="avatar">H</div>
+        <div class="author-info">
+          <div class="author-name">刘洋</div>
+          <div class="author-role">架构师 · 4 年经验</div>
+        </div>
+      </div>
+      <div class="exp-tags">
+        <span class="plugin-tag">异步</span>
+        <span class="plugin-tag">最佳实践</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Quick Start Section -->
+<section id="quickstart">
+  <div class="section-header fade-in">
+    <span class="section-tag">Get Started</span>
+    <h2>五分钟快速开始</h2>
+    <p>从安装到运行第一个智能代理，只需几步</p>
+  </div>
+  <div class="quickstart fade-in">
+    <div class="qs-steps">
+      <div class="qs-step">
+        <div class="qs-step-num">1</div>
+        <div class="qs-step-content">
+          <h4>创建项目</h4>
+          <code>paseo project create /path/to/your/repo</code>
+        </div>
+      </div>
+      <div class="qs-step">
+        <div class="qs-step-num">2</div>
+        <div class="qs-step-content">
+          <h4>创建工作区</h4>
+          <code>paseo workspace create --isolation worktree --mode branch-off --new-branch feat-x --base main</code>
+        </div>
+      </div>
+      <div class="qs-step">
+        <div class="qs-step-num">3</div>
+        <div class="qs-step-content">
+          <h4>运行智能代理</h4>
+          <code>paseo run --provider codex/gpt-5.4 --mode full-access --workspace &lt;id&gt; "分析代码结构"</code>
+        </div>
+      </div>
+      <div class="qs-step">
+        <div class="qs-step-num">4</div>
+        <div class="qs-step-content">
+          <h4>配置定时任务（可选）</h4>
+          <code>paseo schedule create --cron "*/30 * * * *" "检查构建状态"</code>
+        </div>
+      </div>
+      <div class="qs-step">
+        <div class="qs-step-num">5</div>
+        <div class="qs-step-content">
+          <h4>查看代理列表</h4>
+          <code>paseo ls</code>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+  <p>&copy; 2026 Paseo Guides · 社区驱动 · <a href="https://opencode.ai">opencode.ai</a></p>
+</footer>
+
+<script>
+// Scroll animation observer
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+    }
+  });
+}, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+
+document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+// Nav scroll effect
+let lastScroll = 0;
+window.addEventListener('scroll', () => {
+  const nav = document.querySelector('.nav');
+  const currentScroll = window.scrollY;
+  if (currentScroll > 100) {
+    nav.style.background = 'rgba(15,15,19,0.95)';
+  } else {
+    nav.style.background = 'rgba(15,15,19,0.85)';
+  }
+  lastScroll = currentScroll;
+});
+
+// Mobile nav
+document.querySelector('.nav-toggle').addEventListener('click', () => {
+  const links = document.querySelector('.nav-links');
+  if (links.style.display === 'flex') {
+    links.style.display = 'none';
+  } else {
+    links.style.display = 'flex';
+    links.style.position = 'absolute';
+    links.style.top = '60px';
+    links.style.left = '0';
+    links.style.right = '0';
+    links.style.flexDirection = 'column';
+    links.style.padding = '20px';
+    links.style.background = 'var(--bg2)';
+    links.style.borderBottom = '1px solid var(--border)';
+    links.style.gap = '16px';
+  }
+});
+
+console.log('%c Paseo Guides ', 'background: linear-gradient(135deg, #7c6ff7, #36d6b6); color: #fff; font-size: 16px; font-weight: bold; padding: 8px 16px; border-radius: 4px;');
+console.log('社区驱动的 Paseo 使用指南 - 贡献请查看 GitHub 仓库');
+</script>
+
+</body>
+</html>

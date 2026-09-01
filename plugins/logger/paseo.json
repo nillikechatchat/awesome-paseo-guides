@@ -1,0 +1,8 @@
+{"name": "logger",
+ "description": "日志记录插件",
+ "rpc": ["log", "get-logs"],
+ "version": "1.0.0",
+ "scripts": {
+  "log": "node index.js --record",
+  "serve": "node index.js --serve"
+ }}

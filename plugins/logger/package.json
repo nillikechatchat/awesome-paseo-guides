@@ -1,0 +1,10 @@
+{
+  "name": "logger",
+  "description": "Paseo 代理日志记录插件",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "log": "node index.js --record",
+    "serve": "node index.js --serve"
+  }
+}
