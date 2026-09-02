@@ -1,178 +1,193 @@
-# 08 - CLI 命令参考
+# 08 - CLI 命令完整参考
 
-> 基于官方文档 (opencode.ai/docs/cli)
+> 基于官方文档 (paseo.sh/docs/cli)
 
 ## 快速参考
 
-| 命令 | 说明 |
-|------|------|
-| `opencode` | 启动 TUI |
-| `opencode run <prompt>` | 非交互运行 |
-| `opencode agent create` | 创建 Agent |
-| `opencode agent list` | 列出 Agent |
-| `opencode models` | 列出可用模型 |
-| `opencode auth login` | 登录 Provider |
-| `opencode stats` | 使用统计 |
-| `opencode session list` | 列出会话 |
-| `opencode export [id]` | 导出会话 |
-| `opencode import <file>` | 导入会话 |
-| `opencode serve` | 启动 HTTP 服务器 |
-| `opencode web` | 启动 Web 界面 |
-| `opencode pr <number>` | 检出 PR 并运行 |
-| `opencode plugin <module>` | 安装插件 |
-| `opencode upgrade` | 升级 |
-| `opencode uninstall` | 卸载 |
+```bash
+paseo run "fix the tests"            # 启动 Agent
+paseo ls                             # 列运行中的 Agent
+paseo attach <id>                    # 流式输出
+paseo send <id> "also fix linting"   # 发送后续任务
+paseo logs <id>                      # 查看时间线
+paseo stop <id>                      # 停止 Agent
+```
 
-## opencode run（非交互模式）
+## 运行 Agent
 
 ```bash
-# 基本用法
-opencode run "解释 JavaScript 闭包的工作原理"
-
-# 指定模型
-opencode run --model anthropic/claude-sonnet-4-20250514 "解释 async/await"
-
-# 附加文件
-opencode run --file ./src/index.ts "审查这个文件"
-
-# JSON 输出
-opencode run --format json "解释 React hooks"
-
-# 连接已有服务器（避免 MCP 冷启动）
-opencode serve &
-opencode run --attach http://localhost:4096 "Explain closures"
-
-# 自动批准权限
-opencode run --auto "重构这个模块"
-
-# 指定 Agent
-opencode run --agent plan "分析这个架构"
+paseo run "实现用户认证"
+paseo run --provider codex "重构 API 层"
+paseo run --background "运行测试套件"
+paseo run --new-workspace worktree --worktree-mode branch-off --new-branch feature/x --base origin/main "实现功能 X"
+paseo run --workspace <workspace-id> "审查当前 diff"
+paseo run --output-schema schema.json "提取发布说明"
 ```
 
 ### 主要参数
 
-| 参数 | 简写 | 说明 |
-|------|------|------|
-| `--command` | | 使用 message 作为参数 |
-| `--continue` | `-c` | 继续上次会话 |
-| `--session` | `-s` | 继续指定会话 |
-| `--fork` | | Fork 会话 |
-| `--share` | | 分享会话 |
-| `--model` | `-m` | 使用 `provider/model` 格式 |
-| `--agent` | | 使用指定 Agent |
-| `--file` | `-f` | 附加文件 |
-| `--format` | | default 或 json |
-| `--title` | | 会话标题 |
-| `--attach` | | 连接已有服务器 |
-| `--port` | | 本地服务器端口 |
-| `--variant` | | 模型变体 |
-| `--thinking` | | 显示思考过程 |
-| `--auto` | | 自动批准权限 |
+| 参数 | 说明 |
+|------|------|
+| `--provider` | 指定 Provider |
+| `--background` | 后台运行 |
+| `--workspace` | 指定工作区 |
+| `--new-workspace` | 创建新工作区（local/worktree） |
+| `--worktree-mode` | branch-off/checkout-branch/checkout-pr |
+| `--new-branch` | 新分支名 |
+| `--base` | 基准分支 |
+| `--worktree-slug` | worktree 目录名 |
+| `--output-schema` | JSON schema 输出格式 |
+| `--title` | Agent 标题 |
 
-## opencode serve / web
+## 代理管理
 
 ```bash
-# 启动 HTTP API 服务器
-opencode serve --port 4096
+paseo ls                         # 运行中的
+paseo ls -a                      # 包含已完成/已停止的
+paseo ls -g                      # 所有目录
+paseo ls -a -g --json            # JSON 格式完整列表
 
-# 启动 Web 界面
-opencode web --port 4096 --hostname 0.0.0.0
+paseo attach <id>                # 附加流式输出
+paseo send <id> "继续工作"        # 发送后续任务
+paseo send <id> --image png      # 带图片发送
+paseo send <id> --no-wait        # 排队不等待
+paseo logs <id>                  # 完整时间线
+paseo logs <id> -f               # 跟随
+paseo logs <id> --tail 10        # 最后 10 条
+paseo logs <id> --filter tools   # 仅工具调用
+paseo wait <id>                  # 等待完成
+paseo wait <id> --timeout 60     # 超时
+paseo stop <id>                  # 停止
 
-# 启用基本认证
-export OPENCODE_SERVER_PASSWORD=secret
-export OPENCODE_SERVER_USERNAME=admin
-opencode web
-
-# 启用 mDNS 发现
-opencode web --mdns --mdns-domain myapp
-
-# 附加 TUI 到已有服务器
-opencode attach http://10.20.30.40:4096
+paseo agent mode <id> --list     # 可用模式
+paseo agent mode <id> bypass     # 设置 bypass
+paseo agent mode <id> plan       # 设置 plan
+paseo agent detach <id>          # 提升为顶层代理
 ```
 
-## opencode agent
+## 项目
 
 ```bash
-# 交互式创建
-opencode agent create
-
-# 非交互式创建
-opencode agent create \
-  --description "安全审计" \
-  --mode subagent \
-  --permissions bash,read,grep \
-  --model anthropic/claude-sonnet-4-20250514
-
-# 列出
-opencode agent list
+paseo project create             # 注册当前目录
+paseo project create /srv/repos/api --host devbox:6767
+paseo project ls
+paseo project rename <id> "My app"
+paseo project rename <id> --reset
+paseo project delete <id>
 ```
 
-## opencode mcp
+## 工作区
 
 ```bash
-opencode mcp add           # 添加 MCP 服务器
-opencode mcp list          # 列出已配置的 MCP
-opencode mcp auth <name>   # 认证
-opencode mcp auth list     # 查看 OAuth 状态
-opencode mcp logout <name> # 移除凭据
-opencode mcp debug <name>  # 调试
+paseo workspace create --isolation local --path ~/dev/my-app --title main
+paseo workspace create --isolation worktree --mode branch-off --new-branch feature/auth --base origin/main
+paseo workspace ls
+paseo workspace rename <id> "Auth rework"
+paseo workspace archive <id>
 ```
 
-## opencode session
+## 脚本
 
 ```bash
-opencode session list --max-count 10   # 最近 10 个会话
-opencode session list --format json    # JSON 格式
-opencode session delete <sessionID>    # 删除会话
+paseo script ls
+paseo script start web
+paseo script stop web
 ```
 
-## opencode stats
+## 插件
 
 ```bash
-opencode stats                    # 全部统计
-opencode stats --days 7           # 最近 7 天
-opencode stats --models           # 显示模型使用分解
-opencode stats --tools 10         # 前 10 个工具使用
+paseo plugin init /path/to/plugin
+paseo plugin install /path/to/plugin
+paseo plugin add owner/repository
+paseo plugin add owner/monorepo:plugins/review
+paseo plugin status
+paseo plugin update my-plugin
+paseo plugin update --all
+paseo plugin ls
+paseo plugin reload my-plugin
+paseo plugin logs my-plugin
+paseo plugin disable my-plugin
+paseo plugin enable my-plugin
+paseo plugin remove my-plugin
 ```
 
-## opencode export / import
+## Provider 诊断
 
 ```bash
-opencode export [sessionID]        # 导出为 JSON
-opencode export --sanitize         # 脱敏导出
-
-# 导入
-opencode import session.json
-opencode import https://opncd.ai/s/abc123
+paseo provider diagnostic claude
+paseo provider diagnostic codex --json
+paseo provider diagnostic opencode --host devbox:6767
 ```
 
-## opencode github
+## Schedule
 
 ```bash
-opencode github install    # 安装 GitHub Agent
-opencode github run        # 运行（通常在 GitHub Actions 中）
-opencode github run --event <type> --token <PAT>
+paseo schedule create --every 30m --cwd ~/dev/my-app "继续重构并留言"
+paseo schedule ls
+paseo schedule pause <id>
 ```
 
-## 全局参数
+## 权限
 
 ```bash
-opencode --help                 # 帮助
-opencode --version              # 版本
-opencode --print-logs           # 打印日志到 stderr
-opencode --log-level DEBUG      # 日志级别
-opencode --pure                 # 禁用外部插件
+paseo permit ls
+paseo permit allow <id>
+paseo permit deny <id> --all
 ```
 
-## 重要环境变量
+## 守护进程
+
+```bash
+paseo daemon start
+paseo daemon start --web-ui
+paseo daemon status
+paseo daemon restart
+paseo daemon stop
+paseo reload
+paseo daemon pair
+paseo daemon pair --relay
+paseo daemon pair --json
+paseo daemon set-password
+```
+
+## 远程连接
+
+```bash
+paseo --host localhost:6767 ls
+paseo --host ssh://user@host ls
+paseo --host 'https://app.paseo.sh/#offer=...' run "修复测试"
+export PASEO_HOST=devbox:6767
+paseo ls
+```
+
+## 输出格式
+
+```bash
+paseo ls --json
+paseo ls --format yaml
+paseo ls -q               # 仅 ID
+```
+
+## 全局选项
+
+| 选项 | 说明 |
+|------|------|
+| `--host <target>` | 连接远程 daemon |
+| `--json` | JSON 输出 |
+| `-q, --quiet` | 最小输出 |
+| `--no-color` | 禁用颜色 |
+
+## 环境变量
 
 | 变量 | 说明 |
 |------|------|
-| `OPENCODE_CONFIG` | 配置文件路径 |
-| `OPENCODE_AUTO_SHARE` | 自动分享会话 |
-| `OPENCODE_SERVER_PASSWORD` | HTTP 基本认证密码 |
-| `OPENCODE_DISABLE_PRUNE` | 禁用自动清理旧数据 |
-| `OPENCODE_DISABLE_AUTOCOMPACT` | 禁用自动上下文压缩 |
-| `OPENCODE_DISABLE_CLAUDE_CODE` | 禁用 Claude Code 兼容 |
-| `OPENCODE_ENABLE_EXA` | 启用 Exa 搜索 |
-| `OPENCODE_EXPERIMENTAL_WORKSPACES` | 启用工作区支持 |
+| `PASEO_HOME` | Paseo 主目录 |
+| `PASEO_PASSWORD` | 连接密码 |
+| `PASEO_LISTEN` | 覆盖监听地址 |
+| `PASEO_RELAY_ENABLED` | 启用/禁用中继 |
+| `PASEO_HOSTNAMES` | 覆盖 hostnames |
+| `PASEO_WEB_UI_ENABLED` | 启用网页 UI |
+| `PASEO_HOST` | 连接目标（替代 --host） |
+| `PASEO_VOICE_LLM_PROVIDER` | 语音 LLM Provider |
+| `PASEO_LOCAL_MODELS_DIR` | 本地模型目录 |

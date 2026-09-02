@@ -3,514 +3,109 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Paseo Guides - OpenCode 智能代理平台</title>
+<title>Paseo Guides - 多代理编排平台</title>
 <style>
-:root {
-  --bg: #0f0f13;
-  --bg2: #1a1a24;
-  --bg3: #24243a;
-  --accent: #7c6ff7;
-  --accent2: #5b9cf5;
-  --accent3: #36d6b6;
-  --text: #e8e8f0;
-  --text2: #9898b0;
-  --border: #2a2a40;
-  --card: #14141f;
-  --radius: 12px;
-  --font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  --mono: 'JetBrains Mono', 'Fira Code', monospace;
-}
-* { margin: 0; padding: 0; box-sizing: border-box; }
-html { scroll-behavior: smooth; }
-body {
-  font-family: var(--font);
-  background: var(--bg);
-  color: var(--text);
-  line-height: 1.7;
-  overflow-x: hidden;
-}
-
-/* ===== Navigation ===== */
-.nav {
-  position: fixed;
-  top: 0; left: 0; right: 0;
-  z-index: 1000;
-  padding: 16px 40px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  backdrop-filter: blur(20px);
-  background: rgba(15,15,19,0.85);
-  border-bottom: 1px solid var(--border);
-  transition: all 0.3s;
-}
-.nav-logo {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  font-size: 20px;
-  font-weight: 700;
-  background: linear-gradient(135deg, var(--accent), var(--accent2));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-.nav-logo svg { width: 28px; height: 28px; }
-.nav-links { display: flex; gap: 28px; list-style: none; }
-.nav-links a {
-  color: var(--text2);
-  text-decoration: none;
-  font-size: 14px;
-  font-weight: 500;
-  transition: color 0.2s;
-  position: relative;
-}
-.nav-links a:hover { color: var(--text); }
-.nav-links a::after {
-  content: '';
-  position: absolute;
-  bottom: -4px; left: 0;
-  width: 0; height: 2px;
-  background: var(--accent);
-  transition: width 0.3s;
-}
-.nav-links a:hover::after { width: 100%; }
-
-.nav-toggle { display: none; cursor: pointer; background: none; border: none; color: var(--text); font-size: 24px; }
-
-/* ===== Hero ===== */
-.hero {
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  padding: 120px 40px 80px;
-  position: relative;
-  overflow: hidden;
-}
-.hero::before {
-  content: '';
-  position: absolute;
-  top: -50%; left: -50%;
-  width: 200%; height: 200%;
-  background: radial-gradient(ellipse at 50% 0%, rgba(124,111,247,0.15) 0%, transparent 60%),
-              radial-gradient(ellipse at 80% 50%, rgba(54,214,182,0.08) 0%, transparent 50%),
-              radial-gradient(ellipse at 20% 80%, rgba(91,156,245,0.08) 0%, transparent 50%);
-  animation: pulse 8s ease-in-out infinite;
-}
-@keyframes pulse {
-  0%, 100% { opacity: 0.8; }
-  50% { opacity: 1; }
-}
-.hero-content { position: relative; z-index: 1; max-width: 800px; }
-.hero-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 6px 16px;
-  border-radius: 20px;
-  background: var(--bg2);
-  border: 1px solid var(--border);
-  font-size: 13px;
-  color: var(--accent2);
-  margin-bottom: 24px;
-  font-weight: 500;
-}
-.hero-badge .dot {
-  width: 8px; height: 8px;
-  border-radius: 50%;
-  background: var(--accent3);
-  animation: blink 2s infinite;
-}
-@keyframes blink {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.3; }
-}
-.hero h1 {
-  font-size: clamp(36px, 6vw, 64px);
-  font-weight: 800;
-  line-height: 1.1;
-  margin-bottom: 20px;
-  letter-spacing: -0.02em;
-}
-.hero h1 .gradient {
-  background: linear-gradient(135deg, var(--accent), var(--accent2), var(--accent3));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-size: 200% 200%;
-  animation: shift 4s ease-in-out infinite;
-}
-@keyframes shift {
-  0%, 100% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-}
-.hero p {
-  font-size: 18px;
-  color: var(--text2);
-  max-width: 600px;
-  margin: 0 auto 40px;
-}
-.hero-actions { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
-.btn {
-  padding: 12px 28px;
-  border-radius: 8px;
-  font-size: 14px;
-  font-weight: 600;
-  text-decoration: none;
-  transition: all 0.25s;
-  cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  border: none;
-}
-.btn-primary {
-  background: linear-gradient(135deg, var(--accent), var(--accent2));
-  color: #fff;
-  box-shadow: 0 4px 20px rgba(124,111,247,0.3);
-}
-.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 6px 30px rgba(124,111,247,0.5); }
-.btn-secondary {
-  background: var(--bg2);
-  color: var(--text);
-  border: 1px solid var(--border);
-}
-.btn-secondary:hover { border-color: var(--accent); background: var(--bg3); }
-
-/* Hero visual */
-.hero-visual {
-  margin-top: 60px;
-  width: 100%;
-  max-width: 700px;
-  position: relative;
-  z-index: 1;
-}
-.hero-visual pre {
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 24px 28px;
-  font-family: var(--mono);
-  font-size: 14px;
-  line-height: 1.8;
-  text-align: left;
-  overflow-x: auto;
-  box-shadow: 0 20px 60px rgba(0,0,0,0.4);
-}
-.code-line { display: block; }
-.code-cmd { color: var(--accent3); }
-.code-flag { color: var(--accent2); }
-.code-comment { color: var(--text2); font-style: italic; }
-.code-output { color: var(--text2); }
-.code-accent { color: var(--accent); }
-.code-type { color: #f7a440; }
-
-/* ===== Section base ===== */
-section {
-  padding: 100px 40px;
-  max-width: 1200px;
-  margin: 0 auto;
-}
-.section-header {
-  text-align: center;
-  margin-bottom: 60px;
-}
-.section-header h2 {
-  font-size: clamp(28px, 4vw, 40px);
-  font-weight: 700;
-  margin-bottom: 14px;
-}
-.section-header p {
-  color: var(--text2);
-  font-size: 16px;
-  max-width: 600px;
-  margin: 0 auto;
-}
-.section-tag {
-  display: inline-block;
-  padding: 4px 12px;
-  border-radius: 6px;
-  background: var(--bg2);
-  border: 1px solid var(--border);
-  font-size: 12px;
-  color: var(--accent);
-  font-weight: 600;
-  margin-bottom: 12px;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-}
-
-/* ===== Features Grid ===== */
-.features-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 20px;
-}
-.feature-card {
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 28px;
-  transition: all 0.3s;
-  position: relative;
-  overflow: hidden;
-}
-.feature-card::before {
-  content: '';
-  position: absolute;
-  top: 0; left: 0; right: 0;
-  height: 3px;
-  background: linear-gradient(90deg, var(--accent), var(--accent2));
-  opacity: 0;
-  transition: opacity 0.3s;
-}
-.feature-card:hover { border-color: var(--accent); transform: translateY(-4px); }
-.feature-card:hover::before { opacity: 1; }
-.feature-icon {
-  width: 48px; height: 48px;
-  border-radius: 10px;
-  background: var(--bg2);
-  border: 1px solid var(--border);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 16px;
-  font-size: 22px;
-}
-.feature-card h3 { font-size: 18px; font-weight: 600; margin-bottom: 8px; }
-.feature-card p { color: var(--text2); font-size: 14px; line-height: 1.6; }
-.feature-tag {
-  display: inline-block;
-  margin-top: 14px;
-  padding: 3px 10px;
-  border-radius: 4px;
-  font-size: 11px;
-  font-weight: 600;
-  background: rgba(124,111,247,0.15);
-  color: var(--accent);
-}
-
-/* ===== Tutorials ===== */
-.tutorials-list { display: flex; flex-direction: column; gap: 16px; }
-.tutorial-item {
-  display: flex;
-  align-items: center;
-  gap: 20px;
-  padding: 24px 28px;
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  transition: all 0.3s;
-  cursor: pointer;
-}
-.tutorial-item:hover { border-color: var(--accent); transform: translateX(4px); }
-.tutorial-num {
-  font-size: 28px;
-  font-weight: 800;
-  color: var(--accent);
-  min-width: 50px;
-  font-family: var(--mono);
-}
-.tutorial-content { flex: 1; }
-.tutorial-content h3 { font-size: 16px; font-weight: 600; margin-bottom: 4px; }
-.tutorial-content p { color: var(--text2); font-size: 13px; }
-.tutorial-meta {
-  display: flex;
-  gap: 12px;
-  margin-top: 8px;
-}
-.tutorial-meta span {
-  font-size: 11px;
-  padding: 2px 8px;
-  border-radius: 4px;
-  background: var(--bg2);
-  color: var(--text2);
-  font-weight: 500;
-}
-.tutorial-arrow {
-  color: var(--text2);
-  font-size: 20px;
-  transition: transform 0.2s, color 0.2s;
-}
-.tutorial-item:hover .tutorial-arrow { transform: translateX(4px); color: var(--accent); }
-
-/* ===== Plugins ===== */
-.plugins-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
-  gap: 20px;
-}
-.plugin-card {
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 28px;
-  transition: all 0.3s;
-}
-.plugin-card:hover { border-color: var(--accent2); transform: translateY(-3px); }
-.plugin-card h3 { font-size: 17px; font-weight: 600; margin-bottom: 6px; display: flex; align-items: center; gap: 10px; }
-.plugin-card p { color: var(--text2); font-size: 13px; margin-bottom: 16px; }
-.plugin-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 16px; }
-.plugin-tag {
-  padding: 3px 10px;
-  border-radius: 4px;
-  font-size: 11px;
-  font-weight: 500;
-  background: var(--bg2);
-  color: var(--text2);
-  border: 1px solid var(--border);
-}
-.plugin-code {
-  background: var(--bg);
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  padding: 16px;
-  font-family: var(--mono);
-  font-size: 12px;
-  line-height: 1.7;
-  overflow-x: auto;
-  color: var(--text2);
-}
-.plugin-code .k { color: var(--accent); }
-.plugin-code .s { color: var(--accent3); }
-.plugin-code .n { color: var(--accent2); }
-
-/* ===== Experiences ===== */
-.experiences-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 20px;
-}
-.exp-card {
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 28px;
-  transition: all 0.3s;
-}
-.exp-card:hover { border-color: var(--accent3); transform: translateY(-3px); }
-.exp-card .quote {
-  font-size: 14px;
-  color: var(--text2);
-  line-height: 1.8;
-  margin-bottom: 16px;
-  position: relative;
-  padding-left: 20px;
-  border-left: 2px solid var(--accent3);
-  font-style: italic;
-}
-.exp-card .author {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-.exp-card .avatar {
-  width: 36px; height: 36px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, var(--accent), var(--accent3));
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 14px;
-  font-weight: 700;
-  color: #fff;
-}
-.exp-card .author-info { flex: 1; }
-.exp-card .author-name { font-size: 13px; font-weight: 600; }
-.exp-card .author-role { font-size: 11px; color: var(--text2); }
-.exp-card .exp-tags { display: flex; gap: 6px; margin-top: 14px; flex-wrap: wrap; }
-
-/* ===== Quick Start ===== */
-.quickstart {
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 40px;
-  margin-top: 40px;
-}
-.quickstart h3 { font-size: 20px; font-weight: 700; margin-bottom: 20px; }
-.qs-steps { display: flex; flex-direction: column; gap: 20px; }
-.qs-step {
-  display: flex;
-  gap: 16px;
-  padding: 16px;
-  background: var(--bg);
-  border-radius: 8px;
-  border: 1px solid var(--border);
-}
-.qs-step-num {
-  width: 32px; height: 32px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, var(--accent), var(--accent2));
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 13px;
-  font-weight: 700;
-  color: #fff;
-  flex-shrink: 0;
-}
-.qs-step-content { flex: 1; }
-.qs-step-content h4 { font-size: 14px; font-weight: 600; margin-bottom: 6px; }
-.qs-step-content code {
-  font-family: var(--mono);
-  font-size: 13px;
-  background: var(--bg2);
-  padding: 8px 12px;
-  border-radius: 6px;
-  display: block;
-  color: var(--text);
-  border: 1px solid var(--border);
-  margin-top: 8px;
-}
-
-/* ===== Footer ===== */
-.footer {
-  text-align: center;
-  padding: 40px;
-  border-top: 1px solid var(--border);
-  color: var(--text2);
-  font-size: 13px;
-}
-.footer a { color: var(--accent); text-decoration: none; }
-.footer a:hover { text-decoration: underline; }
-
-/* ===== Responsive ===== */
-@media (max-width: 768px) {
-  .nav { padding: 14px 20px; }
-  .nav-links { display: none; }
-  .nav-toggle { display: block; }
-  section { padding: 60px 20px; }
-  .hero { padding: 100px 20px 60px; }
-  .hero h1 { font-size: 32px; }
-  .hero p { font-size: 15px; }
-  .hero-visual pre { font-size: 12px; padding: 16px; }
-  .features-grid { grid-template-columns: 1fr; }
-  .plugins-grid { grid-template-columns: 1fr; }
-  .experiences-grid { grid-template-columns: 1fr; }
-  .qs-step { flex-direction: column; }
-  .quickstart { padding: 24px; }
-}
-
-/* ===== Scroll animations ===== */
-.fade-in {
-  opacity: 0;
-  transform: translateY(20px);
-  transition: opacity 0.6s ease, transform 0.6s ease;
-}
-.fade-in.visible {
-  opacity: 1;
-  transform: translateY(0);
-}
+:root{--bg:#0f0f13;--bg2:#1a1a24;--bg3:#24243a;--accent:#7c6ff7;--accent2:#5b9cf5;--accent3:#36d6b6;--text:#e8e8f0;--text2:#9898b0;--border:#2a2a40;--card:#14141f;--radius:12px;--font:'Inter',-apple-system,sans-serif;--mono:'JetBrains Mono','Fira Code',monospace}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:var(--font);background:var(--bg);color:var(--text);line-height:1.7}
+.nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:16px 40px;display:flex;align-items:center;justify-content:space-between;backdrop-filter:blur(20px);background:rgba(15,15,19,0.85);border-bottom:1px solid var(--border)}
+.nav-logo{font-size:20px;font-weight:700;background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;display:flex;align-items:center;gap:10px}
+.nav-links{display:flex;gap:28px;list-style:none}
+.nav-links a{color:var(--text2);text-decoration:none;font-size:14px;font-weight:500;transition:color 0.2s}
+.nav-links a:hover{color:var(--text)}
+.nav-toggle{display:none;cursor:pointer;background:none;border:none;color:var(--text);font-size:24px}
+.hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:120px 40px 80px;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;top:-50%;left:-50%;width:200%;height:200%;background:radial-gradient(ellipse at 50% 0%,rgba(124,111,247,0.15) 0%,transparent 60%),radial-gradient(ellipse at 80% 50%,rgba(54,214,182,0.08) 0%,transparent 50%),radial-gradient(ellipse at 20% 80%,rgba(91,156,245,0.08) 0%,transparent 50%);animation:pulse 8s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:0.8}50%{opacity:1}}
+.hero-content{position:relative;z-index:1;max-width:800px}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;padding:6px 16px;border-radius:20px;background:var(--bg2);border:1px solid var(--border);font-size:13px;color:var(--accent2);margin-bottom:24px;font-weight:500}
+.hero-badge .dot{width:8px;height:8px;border-radius:50%;background:var(--accent3);animation:blink 2s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0.3}}
+.hero h1{font-size:clamp(36px,6vw,64px);font-weight:800;line-height:1.1;margin-bottom:20px;letter-spacing:-0.02em}
+.hero h1 .gradient{background:linear-gradient(135deg,var(--accent),var(--accent2),var(--accent3));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-size:200% 200%;animation:shift 4s ease-in-out infinite}
+@keyframes shift{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
+.hero p{font-size:18px;color:var(--text2);max-width:600px;margin:0 auto 40px}
+.hero-actions{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
+.btn{padding:12px 28px;border-radius:8px;font-size:14px;font-weight:600;text-decoration:none;transition:all 0.25s;cursor:pointer;display:inline-flex;align-items:center;gap:8px;border:none}
+.btn-primary{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;box-shadow:0 4px 20px rgba(124,111,247,0.3)}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 6px 30px rgba(124,111,247,0.5)}
+.btn-secondary{background:var(--bg2);color:var(--text);border:1px solid var(--border)}
+.btn-secondary:hover{border-color:var(--accent);background:var(--bg3)}
+.hero-visual{margin-top:60px;width:100%;max-width:700px;position:relative;z-index:1}
+.hero-visual pre{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:24px 28px;font-family:var(--mono);font-size:14px;line-height:1.8;text-align:left;overflow-x:auto;box-shadow:0 20px 60px rgba(0,0,0,0.4)}
+.code-line{display:block}
+.code-cmd{color:var(--accent3)}
+.code-flag{color:var(--accent2)}
+.code-comment{color:var(--text2);font-style:italic}
+.code-output{color:var(--text2)}
+.code-accent{color:var(--accent)}
+section{padding:100px 40px;max-width:1200px;margin:0 auto}
+.section-header{text-align:center;margin-bottom:60px}
+.section-header h2{font-size:clamp(28px,4vw,40px);font-weight:700;margin-bottom:14px}
+.section-header p{color:var(--text2);font-size:16px;max-width:600px;margin:0 auto}
+.section-tag{display:inline-block;padding:4px 12px;border-radius:6px;background:var(--bg2);border:1px solid var(--border);font-size:12px;color:var(--accent);font-weight:600;margin-bottom:12px;text-transform:uppercase;letter-spacing:0.05em}
+.features-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:20px}
+.feature-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:28px;transition:all 0.3s;position:relative;overflow:hidden}
+.feature-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--accent),var(--accent2));opacity:0;transition:opacity 0.3s}
+.feature-card:hover{border-color:var(--accent);transform:translateY(-4px)}
+.feature-card:hover::before{opacity:1}
+.feature-icon{width:48px;height:48px;border-radius:10px;background:var(--bg2);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;margin-bottom:16px;font-size:22px}
+.feature-card h3{font-size:18px;font-weight:600;margin-bottom:8px}
+.feature-card p{color:var(--text2);font-size:14px;line-height:1.6}
+.feature-tag{display:inline-block;margin-top:14px;padding:3px 10px;border-radius:4px;font-size:11px;font-weight:600;background:rgba(124,111,247,0.15);color:var(--accent)}
+.tutorials-list{display:flex;flex-direction:column;gap:16px}
+.tutorial-item{display:flex;align-items:center;gap:20px;padding:24px 28px;background:var(--card);border:1px solid var(--border);border-radius:var(--radius);transition:all 0.3s;cursor:pointer}
+.tutorial-item:hover{border-color:var(--accent);transform:translateX(4px)}
+.tutorial-num{font-size:28px;font-weight:800;color:var(--accent);min-width:50px;font-family:var(--mono)}
+.tutorial-content{flex:1}
+.tutorial-content h3{font-size:16px;font-weight:600;margin-bottom:4px}
+.tutorial-content p{color:var(--text2);font-size:13px}
+.tutorial-meta{display:flex;gap:12px;margin-top:8px}
+.tutorial-meta span{font-size:11px;padding:2px 8px;border-radius:4px;background:var(--bg2);color:var(--text2);font-weight:500}
+.tutorial-arrow{color:var(--text2);font-size:20px;transition:transform 0.2s,color 0.2s}
+.tutorial-item:hover .tutorial-arrow{transform:translateX(4px);color:var(--accent)}
+.plugins-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:20px}
+.plugin-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:28px;transition:all 0.3s}
+.plugin-card:hover{border-color:var(--accent2);transform:translateY(-3px)}
+.plugin-card h3{font-size:17px;font-weight:600;margin-bottom:6px;display:flex;align-items:center;gap:10px}
+.plugin-card p{color:var(--text2);font-size:13px;margin-bottom:16px}
+.plugin-tags{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px}
+.plugin-tag{padding:3px 10px;border-radius:4px;font-size:11px;font-weight:500;background:var(--bg2);color:var(--text2);border:1px solid var(--border)}
+.plugin-code{background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:16px;font-family:var(--mono);font-size:12px;line-height:1.7;overflow-x:auto;color:var(--text2)}
+.plugin-code .k{color:var(--accent)}
+.plugin-code .s{color:var(--accent3)}
+.experiences-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:20px}
+.exp-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:28px;transition:all 0.3s}
+.exp-card:hover{border-color:var(--accent3);transform:translateY(-3px)}
+.exp-card .quote{font-size:14px;color:var(--text2);line-height:1.8;margin-bottom:16px;position:relative;padding-left:20px;border-left:2px solid var(--accent3);font-style:italic}
+.exp-card .author{display:flex;align-items:center;gap:12px}
+.exp-card .avatar{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent3));display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;color:#fff}
+.exp-card .author-info{flex:1}
+.exp-card .author-name{font-size:13px;font-weight:600}
+.exp-card .author-role{font-size:11px;color:var(--text2)}
+.exp-card .exp-tags{display:flex;gap:6px;margin-top:14px;flex-wrap:wrap}
+.quickstart{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:40px;margin-top:40px}
+.quickstart h3{font-size:20px;font-weight:700;margin-bottom:20px}
+.qs-steps{display:flex;flex-direction:column;gap:20px}
+.qs-step{display:flex;gap:16px;padding:16px;background:var(--bg);border-radius:8px;border:1px solid var(--border)}
+.qs-step-num{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:#fff;flex-shrink:0}
+.qs-step-content{flex:1}
+.qs-step-content h4{font-size:14px;font-weight:600;margin-bottom:6px}
+.qs-step-content code{font-family:var(--mono);font-size:13px;background:var(--bg2);padding:8px 12px;border-radius:6px;display:block;color:var(--text);border:1px solid var(--border);margin-top:8px}
+.footer{text-align:center;padding:40px;border-top:1px solid var(--border);color:var(--text2);font-size:13px}
+.footer a{color:var(--accent);text-decoration:none}
+.footer a:hover{text-decoration:underline}
+@media(max-width:768px){.nav{padding:14px 20px}.nav-links{display:none}.nav-toggle{display:block}section{padding:60px 20px}.hero{padding:100px 20px 60px}.hero h1{font-size:32px}.hero p{font-size:15px}.hero-visual pre{font-size:12px;padding:16px}.features-grid,.plugins-grid,.experiences-grid{grid-template-columns:1fr}.qs-step{flex-direction:column}.quickstart{padding:24px}}
+.fade-in{opacity:0;transform:translateY(20px);transition:opacity 0.6s ease,transform 0.6s ease}
+.fade-in.visible{opacity:1;transform:translateY(0)}
 </style>
 </head>
 <body>
 
-<!-- Navigation -->
 <nav class="nav">
   <div class="nav-logo">
-    <svg viewBox="0 0 24 24" fill="none">
+    <svg viewBox="0 0 24 24" fill="none" width="28" height="28">
       <circle cx="12" cy="12" r="10" stroke="url(#g1)" stroke-width="2"/>
       <circle cx="12" cy="12" r="4" fill="url(#g1)"/>
       <defs><linearGradient id="g1" x1="0" y1="0" x2="24" y2="24"><stop offset="0%" stop-color="#7c6ff7"/><stop offset="100%" stop-color="#36d6b6"/></linearGradient></defs>
@@ -527,85 +122,79 @@ section {
   <button class="nav-toggle" onclick="document.querySelector('.nav-links').classList.toggle('mobile-open')">&#9776;</button>
 </nav>
 
-<!-- Hero Section -->
 <section class="hero" id="hero">
   <div class="hero-content">
-    <div class="hero-badge">
-      <span class="dot"></span>
-      社区驱动 · 持续更新
-    </div>
-    <h1>掌握 <span class="gradient">Paseo</span><br>智能代理编排平台</h1>
-    <p>从零开始学习 Paseo 代理管理、工作区编排、定时任务调度与插件开发，分享社区实践经验与最佳用法。</p>
+    <div class="hero-badge"><span class="dot"></span>开源 · 自托管 · 隐私优先</div>
+    <h1>掌握 <span class="gradient">Paseo</span><br>多代理编排平台</h1>
+    <p>本地守护进程统一编排 Claude Code、Codex、Copilot、OpenCode、Pi。桌面端、移动端、网页、CLI 统一管理。</p>
     <div class="hero-actions">
       <a href="#quickstart" class="btn btn-primary">快速上手 &#8594;</a>
       <a href="#tutorials" class="btn btn-secondary">浏览教程</a>
     </div>
   </div>
   <div class="hero-visual">
-    <pre><span class="code-line"><span class="code-comment"># 非交互运行 — 脚本化、自动化、一键执行</span></span><span class="code-line"><span class="code-cmd">opencode</span> <span class="code-flag">run</span> <span class="code-flag">--model</span> <span class="code-accent">anthropic/claude-sonnet-4</span> <span class="code-flag">"分析这个仓库的结构并生成报告"</span></span><span class="code-line"></span><span class="code-line"><span class="code-comment"># 带参数</span></span><span class="code-line"><span class="code-cmd">opencode</span> <span class="code-flag">run</span> <span class="code-flag">--auto</span> <span class="code-flag">--agent</span> <span class="code-accent">plan</span> <span class="code-flag">--file</span> <span class="code-accent">./src/index.ts</span> <span class="code-flag">"审查并重构"</span></span><span class="code-line"></span><span class="code-line"><span class="code-comment"># 结果</span></span><span class="code-line"><span class="code-output">✓ Session created</span></span><span class="code-line"><span class="code-output">✓ Agent plan selected (read-only)</span></span><span class="code-line"><span class="code-output">✓ Auto-approve enabled</span></span><span class="code-line"><span class="code-output">→ 正在分析仓库结构...</span></span></pre>
+    <pre><span class="code-line"><span class="code-comment"># 一行命令启动 Codex 实现功能</span></span><span class="code-line"><span class="code-cmd">paseo</span> <span class="code-flag">run</span> <span class="code-flag">--provider</span> <span class="code-accent">codex/gpt-5.5</span> <span class="code-flag">"实现用户认证"</span></span><span class="code-line"><span class="code-flag">--background</span></span><span class="code-line"></span><span class="code-line"><span class="code-comment"># 跨 Provider 编排</span></span><span class="code-line"><span class="code-cmd">paseo</span> <span class="code-flag">run</span> <span class="code-flag">--provider</span> <span class="code-accent">claude/opus-4.6</span> <span class="code-flag">"规划重构方案"</span> <span class="code-flag">--background</span></span><span class="code-line"><span class="code-cmd">paseo</span> <span class="code-flag">run</span> <span class="code-flag">--provider</span> <span class="code-accent">codex/gpt-5.5</span> <span class="code-flag">"实现方案"</span> <span class="code-flag">--background</span></span><span class="code-line"><span class="code-cmd">paseo</span> <span class="code-flag">wait</span> <span class="code-accent">&lt;agent-id&gt;</span></span></pre>
   </div>
 </section>
 
-<!-- Features Section -->
 <section id="features">
   <div class="section-header fade-in">
-    <span class="section-tag">Core Capabilities</span>
-    <h2>核心能力概览</h2>
-    <p>Paseo 是一套完整的远程代理管理基础设施，覆盖从任务执行到定期编排的全生命周期</p>
+    <span class="section-tag">Core</span>
+    <h2>核心能力</h2>
+    <p>Paseo 是一个本地守护进程，在你的机器上运行和编排多个编码代理</p>
   </div>
   <div class="features-grid">
     <div class="feature-card fade-in">
+      <div class="feature-icon">&#128269;</div>
+      <h3>多 Provider 统一</h3>
+      <p>通过统一界面管理 Claude Code、Codex、Copilot、OpenCode、Pi。选择最适合每个任务的模型。</p>
+      <span class="feature-tag">Multi-Provider</span>
+    </div>
+    <div class="feature-card fade-in">
+      <div class="feature-icon">&#128187;</div>
+      <h3>跨设备协作</h3>
+      <p>iOS、Android、Desktop、Web、CLI 五端统一管理。在桌面端开始，手机端查看进度。</p>
+      <span class="feature-tag">Cross-Device</span>
+    </div>
+    <div class="feature-card fade-in">
       <div class="feature-icon">&#9889;</div>
-      <h3>TUI 终端界面</h3>
-      <p>15 个斜杠命令，@ 文件引用，Tab 切换 Agent，图片拖拽，undo/redo 等操作。完整终端编码体验。</p>
-      <span class="feature-tag">TUI</span>
+      <h3>工作区与工作树</h3>
+      <p>基于 git worktree 的隔离环境。paseo.json 配置 setup/teardown/scripts/services，端口自动分配。</p>
+      <span class="feature-tag">Worktrees</span>
     </div>
     <div class="feature-card fade-in">
-      <div class="feature-icon">&#127760;</div>
-      <h3>75+ LLM Provider</h3>
-      <p>OpenAI、Anthropic、DeepSeek、Google Vertex AI、Amazon Bedrock、Ollama 本地模型等全支持。</p>
-      <span class="feature-tag">Provider</span>
+      <div class="feature-icon">&#129302;</div>
+      <h3>Agent 编排</h3>
+      <p>跨 Provider 子代理。Claude 规划 → Codex 实现 → Claude 审查。Heartbeat 保持 Agent 持续工作。</p>
+      <span class="feature-tag">Orchestration</span>
     </div>
     <div class="feature-card fade-in">
-      <div class="feature-icon">&#128101;</div>
-      <h3>多 Agent 协作</h3>
-      <p>Build/Plan 主代理，General/Explore/Scout 子代理，自定义 Agent 配置，@ 提及调用。</p>
-      <span class="feature-tag">Agents</span>
-    </div>
-    <div class="feature-card fade-in">
-      <div class="feature-icon">&#128274;</div>
-      <h3>细粒度权限</h3>
-      <p>allow/ask/deny 三层控制，glob 模式匹配，按 Agent 覆盖，auto mode 一键放行。</p>
-      <span class="feature-tag">Permissions</span>
+      <div class="feature-icon">&#9201;</div>
+      <h3>定时任务与心跳</h3>
+      <p>Schedule 创建独立定时任务，Heartbeat 向同一 Agent 持续发送 prompt 进行监控和重试。</p>
+      <span class="feature-tag">Schedules</span>
     </div>
     <div class="feature-card fade-in">
       <div class="feature-icon">&#128268;</div>
-      <h3>插件与自定义工具</h3>
-      <p>JS/TS 插件系统，事件 Hook，Zod 自定义工具，30+ 社区插件可用。</p>
+      <h3>插件系统</h3>
+      <p>TypeScript/TSX 插件，原生工作区面板、Command Center、全局 surface。支持 React Native。</p>
       <span class="feature-tag">Plugins</span>
-    </div>
-    <div class="feature-card fade-in">
-      <div class="feature-icon">&#128269;</div>
-      <h3>MCP 协议集成</h3>
-      <p>本地/远程 MCP 服务器，OAuth 自动认证，Sentry/Context7/Grep 等开箱即用。</p>
-      <span class="feature-tag">MCP</span>
     </div>
   </div>
 </section>
 
-<!-- Tutorials Section -->
 <section id="tutorials">
   <div class="section-header fade-in">
     <span class="section-tag">Learn</span>
     <h2>教程系列</h2>
-    <p>从入门到进阶，系统学习 Paseo 的各项能力</p>
+    <p>基于 Paseo 官方文档 (paseo.sh/docs) 整理的 10 篇系统化教程</p>
   </div>
   <div class="tutorials-list">
     <div class="tutorial-item fade-in">
       <div class="tutorial-num">01</div>
       <div class="tutorial-content">
         <h3>安装与首次启动</h3>
-        <p>curl/npm/Homebrew/Docker 多种安装方式，/connect 配置 Provider，/init 初始化项目</p>
+        <p>桌面应用、CLI、Docker 三种安装方式，守护进程管理，配置文件</p>
         <div class="tutorial-meta"><span>入门</span><span>10 分钟</span><span>安装</span></div>
       </div>
       <div class="tutorial-arrow">&#8594;</div>
@@ -613,54 +202,54 @@ section {
     <div class="tutorial-item fade-in">
       <div class="tutorial-num">02</div>
       <div class="tutorial-content">
-        <h3>AGENTS.md 规则配置</h3>
-        <p>项目级/全局规则，/init 自动生成，instructions 外部引用，Claude Code 兼容</p>
-        <div class="tutorial-meta"><span>入门</span><span>10 分钟</span><span>Rules</span></div>
+        <h3>连接与设备配对</h3>
+        <p>SSH、Paseo 中继、Tailscale 三种连接方式，手机扫码配对</p>
+        <div class="tutorial-meta"><span>入门</span><span>10 分钟</span><span>Connectivity</span></div>
       </div>
       <div class="tutorial-arrow">&#8594;</div>
     </div>
     <div class="tutorial-item fade-in">
       <div class="tutorial-num">03</div>
       <div class="tutorial-content">
-        <h3>Agent 配置与多 Agent 协作</h3>
-        <p>Build/Plan 主代理，General/Explore/Scout 子代理，JSON/Markdown 配置，权限控制</p>
-        <div class="tutorial-meta"><span>进阶</span><span>20 分钟</span><span>Agents</span></div>
+        <h3>工作区与工作树</h3>
+        <p>Project/Workspace/Session 模型，local/worktree 隔离，paseo.json 配置</p>
+        <div class="tutorial-meta"><span>核心</span><span>20 分钟</span><span>Workspaces</span></div>
       </div>
       <div class="tutorial-arrow">&#8594;</div>
     </div>
     <div class="tutorial-item fade-in">
       <div class="tutorial-num">04</div>
       <div class="tutorial-content">
-        <h3>权限管理系统</h3>
-        <p>allow/ask/deny 三层控制，glob 模式匹配，外部目录权限，auto mode</p>
-        <div class="tutorial-meta"><span>进阶</span><span>15 分钟</span><span>Permissions</span></div>
+        <h3>多 Provider 配置</h3>
+        <p>Claude/Codex/Copilot/OpenCode/Pi，诊断，跨 Provider 对比</p>
+        <div class="tutorial-meta"><span>核心</span><span>10 分钟</span><span>Providers</span></div>
       </div>
       <div class="tutorial-arrow">&#8594;</div>
     </div>
     <div class="tutorial-item fade-in">
       <div class="tutorial-num">05</div>
       <div class="tutorial-content">
-        <h3>MCP 服务器集成</h3>
-        <p>本地/远程 MCP，OAuth 认证，Sentry/Context7/Grep 实战，glob 工具管理</p>
-        <div class="tutorial-meta"><span>高级</span><span>20 分钟</span><span>MCP</span></div>
+        <h3>Agent 编排</h3>
+        <p>跨 Provider 子代理，Heartbeat，实现+验证循环，层级任务分解</p>
+        <div class="tutorial-meta"><span>进阶</span><span>25 分钟</span><span>Orchestration</span></div>
       </div>
       <div class="tutorial-arrow">&#8594;</div>
     </div>
     <div class="tutorial-item fade-in">
       <div class="tutorial-num">06</div>
       <div class="tutorial-content">
-        <h3>插件开发指南</h3>
-        <p>插件生命周期，事件 Hook，自定义工具，通知/.env 保护/compaction 实战</p>
-        <div class="tutorial-meta"><span>高级</span><span>25 分钟</span><span>Plugins</span></div>
+        <h3>定时任务与心跳</h3>
+        <p>Schedule 定时任务，Heartbeat 持续监控，权限管理</p>
+        <div class="tutorial-meta"><span>进阶</span><span>15 分钟</span><span>Schedules</span></div>
       </div>
       <div class="tutorial-arrow">&#8594;</div>
     </div>
     <div class="tutorial-item fade-in">
       <div class="tutorial-num">07</div>
       <div class="tutorial-content">
-        <h3>自定义工具开发</h3>
-        <p>Zod 参数验证，TypeScript/JavaScript 定义，Python 脚本调用，多工具单文件</p>
-        <div class="tutorial-meta"><span>高级</span><span>15 分钟</span><span>Tools</span></div>
+        <h3>插件开发</h3>
+        <p>TypeScript 插件，工作区面板，Command Center，React Native</p>
+        <div class="tutorial-meta"><span>高级</span><span>30 分钟</span><span>Plugins</span></div>
       </div>
       <div class="tutorial-arrow">&#8594;</div>
     </div>
@@ -668,7 +257,7 @@ section {
       <div class="tutorial-num">08</div>
       <div class="tutorial-content">
         <h3>CLI 命令完整参考</h3>
-        <p>run/serve/web/agent/mcp/session/stats 全部命令，参数详解，环境变量清单</p>
+        <p>run/ls/attach/send/logs/workspaces/plugins/daemon 全部命令</p>
         <div class="tutorial-meta"><span>参考</span><span>10 分钟</span><span>CLI</span></div>
       </div>
       <div class="tutorial-arrow">&#8594;</div>
@@ -676,100 +265,94 @@ section {
     <div class="tutorial-item fade-in">
       <div class="tutorial-num">09</div>
       <div class="tutorial-content">
-        <h3>Provider 与模型配置</h3>
-        <p>75+ Provider，Ollama/LM Studio 本地模型，云网关，blacklist/whitelist</p>
-        <div class="tutorial-meta"><span>参考</span><span>15 分钟</span><span>Providers</span></div>
+        <h3>TypeScript SDK</h3>
+        <p>@getpaseo/client，Agent 创建、工作区管理、Provider 发现、事件监听</p>
+        <div class="tutorial-meta"><span>高级</span><span>20 分钟</span><span>SDK</span></div>
       </div>
       <div class="tutorial-arrow">&#8594;</div>
     </div>
     <div class="tutorial-item fade-in">
       <div class="tutorial-num">10</div>
       <div class="tutorial-content">
-        <h3>社区生态与实战组合</h3>
-        <p>30+ 社区插件，13 个项目，awesome-opencode，安全审计/高效开发/后台自动化场景</p>
-        <div class="tutorial-meta"><span>实践</span><span>15 分钟</span><span>Ecosystem</span></div>
+        <h3>浏览器自动化与语音控制</h3>
+        <p>浏览器工具控制网页，语音输入 Dictation，语音对话 Voice Mode</p>
+        <div class="tutorial-meta"><span>进阶</span><span>15 分钟</span><span>Browser/Voice</span></div>
       </div>
       <div class="tutorial-arrow">&#8594;</div>
     </div>
   </div>
 </section>
 
-<!-- Plugins Section -->
 <section id="plugins">
   <div class="section-header fade-in">
     <span class="section-tag">Build</span>
     <h2>插件示例</h2>
-    <p>展示 Paseo 插件和 workspace 脚本的配置方式</p>
+    <p>Paseo 插件使用 TypeScript/TSX 开发，支持 React Native</p>
   </div>
   <div class="plugins-grid">
     <div class="plugin-card fade-in">
-      <h3>&#127775; .env 保护插件</h3>
-      <p>防止 LLM 读取 .env 文件中的密钥，保护敏感配置</p>
+      <h3>&#128203; 工作区面板</h3>
+      <p>添加原生工作区标签页，展示工作区信息</p>
       <div class="plugin-tags">
-        <span class="plugin-tag">security</span>
-        <span class="plugin-tag">hook</span>
-        <span class="plugin-tag">tool.execute.before</span>
+        <span class="plugin-tag">addWorkspacePanel</span>
+        <span class="plugin-tag">React Native</span>
+        <span class="plugin-tag">useWorkspace</span>
       </div>
-      <div class="plugin-code"><span class="k">export const</span> EnvProtection = async ctx =&gt; ({
-  <span class="k">"tool.execute.before"</span>: async (input, output) =&gt; {
-    <span class="k">if</span> (input.tool === <span class="s">"read"</span> &amp;&amp;
-        output.args.filePath.includes(<span class="s">".env"</span>)) {
-      <span class="k">throw new</span> Error(<span class="s">"禁止读取 .env"</span>)
-    }
-  }
-})</div>
+      <div class="plugin-code"><span class="k">plugin.addWorkspacePanel</span>({
+  id: <span class="s">"overview"</span>,
+  title: <span class="s">"Workspace overview"</span>,
+  icon: <span class="s">"PanelsTopLeft"</span>,
+  context: <span class="s">"workspace"</span>,
+  Component: WorkspaceOverview,
+});</div>
     </div>
     <div class="plugin-card fade-in">
-      <h3>&#9989; 通知插件</h3>
-      <p>会话完成时通过系统通知提醒，支持 macOS 和 Linux</p>
+      <h3>&#128176; Command Center</h3>
+      <p>添加 ⌘K 快捷菜单项</p>
       <div class="plugin-tags">
-        <span class="plugin-tag">notification</span>
-        <span class="plugin-tag">session.idle</span>
-        <span class="plugin-tag">osascript</span>
+        <span class="plugin-tag">addCommandCenterItem</span>
+        <span class="plugin-tag">shortcut</span>
+        <span class="plugin-tag">⌘K</span>
       </div>
-      <div class="plugin-code"><span class="k">export const</span> Notify = async ctx =&gt; ({
-  event: async ({ event }) =&gt; {
-    <span class="k">if</span> (event.type === <span class="s">"session.idle"</span>) {
-      <span class="k">await</span> $`osascript -e 'display notification "完成！"'`
-    }
-  }
-})</div>
-    </div>
-    <div class="plugin-card fade-in">
-      <h3>&#128295; 自定义工具</h3>
-      <p>用 Zod 定义参数，LLM 自动调用你编写的工具函数</p>
-      <div class="plugin-tags">
-        <span class="plugin-tag">tool</span>
-        <span class="plugin-tag">Zod</span>
-        <span class="plugin-tag">custom-tools</span>
-      </div>
-      <div class="plugin-code"><span class="k">import {</span> tool <span class="k">from</span> <span class="s">"@opencode-ai/plugin"</span>
-<span class="k">export default</span> tool({
-  description: <span class="s">"查询项目数据库"</span>,
-  args: {
-    query: tool.schema.string()
+      <div class="plugin-code"><span class="k">plugin.addCommandCenterItem</span>({
+  id: <span class="s">"open-overview"</span>,
+  title: <span class="s">"Open workspace overview"</span>,
+  onSelect: ({ openPanel }) => {
+    openPanel(<span class="s">"overview"</span>);
   },
-  <span class="k">async</span> execute(args) {
-    <span class="k">return</span> <span class="s">`已执行: ${args.query}`</span>
-  }
-})</div>
+});</div>
     </div>
     <div class="plugin-card fade-in">
-      <h3>&#128202; Helicone 会话跟踪</h3>
-      <p>自动注入 Helicone 头，按会话分组 LLM 请求，便于分析</p>
+      <h3>&#9889; 快速安装</h3>
+      <p>从 Git 安装社区插件</p>
       <div class="plugin-tags">
-        <span class="plugin-tag">observability</span>
-        <span class="plugin-tag">helicone</span>
-        <span class="plugin-tag">session</span>
+        <span class="plugin-tag">CLI</span>
+        <span class="plugin-tag">GitHub</span>
+        <span class="plugin-tag">GitLab</span>
       </div>
-      <div class="plugin-code">npm install -g opencode-helicone-session
-
-<span class="k">{"plugin"</span>: [<span class="s">"opencode-helicone-session"</span>]}</div>
+      <div class="plugin-code"><span class="s">paseo plugin add</span> owner/repo
+<span class="s">paseo plugin add</span> owner/monorepo:plugins/review
+<span class="s">paseo plugin add</span> https://gitlab.com/group/repo.git
+<span class="s">paseo plugin update</span> --all</div>
+    </div>
+    <div class="plugin-card fade-in">
+      <h3>&#128187; pase JSON 服务</h3>
+      <p>自动管理长驻服务，端口分配，反向代理</p>
+      <div class="plugin-tags">
+        <span class="plugin-tag">service</span>
+        <span class="plugin-tag">reverse-proxy</span>
+        <span class="plugin-tag">auto-port</span>
+      </div>
+      <div class="plugin-code"><span class="k">{"scripts"</span>: {
+  <span class="k">"web"</span>: {
+    <span class="k">"type"</span>: <span class="s">"service"</span>,
+    <span class="k">"command"</span>: <span class="s">"npm run dev -- --port $PASEO_PORT"</span>
+  }
+}}</div>
     </div>
   </div>
 </section>
 
-<!-- Experiences Section -->
 <section id="experiences">
   <div class="section-header fade-in">
     <span class="section-tag">Community</span>
@@ -778,192 +361,112 @@ section {
   </div>
   <div class="experiences-grid">
     <div class="exp-card fade-in">
-      <div class="quote">"Plan 模式是我最喜欢的功能。切到 Plan 后先让 AI 分析架构，确认方案没问题再切回 Build 执行。以前经常让 AI 直接改代码结果方向错了，现在基本不会了。"</div>
+      <div class="quote">"跨 Provider 编排是真正的杀手级功能。Claude 做架构规划，Codex 快速实现，然后 Claude 审查。每个模型做它最擅长的事。"</div>
       <div class="author">
         <div class="avatar">Z</div>
-        <div class="author-info">
-          <div class="author-name">张明</div>
-          <div class="author-role">后端工程师</div>
-        </div>
+        <div class="author-info"><div class="author-name">张明</div><div class="author-role">后端工程师</div></div>
       </div>
-      <div class="exp-tags">
-        <span class="plugin-tag">Plan Mode</span>
-        <span class="plugin-tag">Agent</span>
-      </div>
+      <div class="exp-tags"><span class="plugin-tag">跨 Provider</span><span class="plugin-tag">编排</span></div>
     </div>
     <div class="exp-card fade-in">
-      <div class="quote">"AGENTS.md + instructions 字段让我把团队规范集中管理。新项目 fork 过来 run 一下 /init，5 分钟就有可工作的 AI 开发环境了。"</div>
+      <div class="quote">"用手机在车上告诉 Paseo 修复一个线上 bug，到家时已经修好了。跨设备体验太丝滑了。"</div>
       <div class="author">
         <div class="avatar">L</div>
-        <div class="author-info">
-          <div class="author-name">李婷</div>
-          <div class="author-role">全栈工程师</div>
-        </div>
+        <div class="author-info"><div class="author-name">李婷</div><div class="author-role">全栈工程师</div></div>
       </div>
-      <div class="exp-tags">
-        <span class="plugin-tag">AGENTS.md</span>
-        <span class="plugin-tag">/init</span>
-      </div>
+      <div class="exp-tags"><span class="plugin-tag">移动端</span><span class="plugin-tag">跨设备</span></div>
     </div>
     <div class="exp-card fade-in">
-      <div class="quote">"用 opencode run --auto 在 GitHub Actions 里自动做 PR 审查。每次 push 触发，AI 自动审查并给出改进建议。"</div>
+      <div class="quote">"paseo.json 的 service 配置太方便了。工作树创建时自动 npm ci，服务自动分配端口和反向代理，零配置跑起本地环境。"</div>
       <div class="author">
         <div class="avatar">W</div>
-        <div class="author-info">
-          <div class="author-name">王浩</div>
-          <div class="author-role">技术负责人</div>
-        </div>
+        <div class="author-info"><div class="author-name">王浩</div><div class="author-role">技术负责人</div></div>
       </div>
-      <div class="exp-tags">
-        <span class="plugin-tag">GitHub</span>
-        <span class="plugin-tag">CI/CD</span>
-      </div>
+      <div class="exp-tags"><span class="plugin-tag">paseo.json</span><span class="plugin-tag">服务管理</span></div>
     </div>
     <div class="exp-card fade-in">
-      <div class="quote">"MCP 集成让 AI 直接查 Sentry 和 Context7 文档。以前调试线上 bug 要切 3 个窗口，现在一句话就搞定。"</div>
+      <div class="quote">"Heartbeat 让我设置 Agent 持续监控 CI。每 2 分钟检查一次，有失败自动修复，30 分钟后自动停止。"</div>
       <div class="author">
         <div class="avatar">C</div>
-        <div class="author-info">
-          <div class="author-name">陈晨</div>
-          <div class="author-role">DevOps</div>
-        </div>
+        <div class="author-info"><div class="author-name">陈晨</div><div class="author-role">DevOps</div></div>
       </div>
-      <div class="exp-tags">
-        <span class="plugin-tag">MCP</span>
-        <span class="plugin-tag">Sentry</span>
-      </div>
+      <div class="exp-tags"><span class="plugin-tag">Heartbeat</span><span class="plugin-tag">CI</span></div>
     </div>
     <div class="exp-card fade-in">
-      <div class="quote">"本地用 Ollama 跑小模型做日常小改动，大模型用 Anthropic。通过 Provider 配置灵活切换，成本和速度都可控。"</div>
+      <div class="quote">"Docker 部署到 NAS 上，通过 Tailscale 手机连接。完全自托管，没有任何数据离开我的网络。"</div>
       <div class="author">
         <div class="avatar">S</div>
-        <div class="author-info">
-          <div class="author-name">孙悦</div>
-          <div class="author-role">AI 工程师</div>
-        </div>
+        <div class="author-info"><div class="author-name">孙悦</div><div class="author-role">AI 工程师</div></div>
       </div>
-      <div class="exp-tags">
-        <span class="plugin-tag">Ollama</span>
-        <span class="plugin-tag">Provider</span>
-      </div>
+      <div class="exp-tags"><span class="plugin-tag">Docker</span><span class="plugin-tag">自托管</span></div>
     </div>
     <div class="exp-card fade-in">
-      <div class="quote">"权限配置太重要了。我用 glob 模式让 AI 可以 git status 但禁止 git push，既方便又安全。团队新人上手也不怕误操作。"</div>
+      <div class="quote">"语音模式让我可以口头和 Agent 讨论方案。不用打字，像和同事对话一样。Dictation 输入长 prompt 比打字快多了。"</div>
       <div class="author">
         <div class="avatar">H</div>
-        <div class="author-info">
-          <div class="author-name">刘洋</div>
-          <div class="author-role">架构师</div>
-        </div>
+        <div class="author-info"><div class="author-name">刘洋</div><div class="author-role">架构师</div></div>
       </div>
-      <div class="exp-tags">
-        <span class="plugin-tag">Permissions</span>
-        <span class="plugin-tag">Glob</span>
-      </div>
+      <div class="exp-tags"><span class="plugin-tag">语音</span><span class="plugin-tag">Voice Mode</span></div>
     </div>
   </div>
 </section>
 
-<!-- Quick Start Section -->
 <section id="quickstart">
   <div class="section-header fade-in">
     <span class="section-tag">Get Started</span>
     <h2>五分钟快速开始</h2>
-    <p>从安装到运行第一个智能代理，只需几步</p>
+    <p>从安装到运行第一个 Agent</p>
   </div>
   <div class="quickstart fade-in">
     <div class="qs-steps">
       <div class="qs-step">
         <div class="qs-step-num">1</div>
         <div class="qs-step-content">
-          <h4>安装</h4>
-          <code>curl -fsSL https://opencode.ai/install | bash</code>
+          <h4>安装 Agent CLI</h4>
+          <code>npm install -g @anthropic-ai/claude-code  # 或 codex / copilot / opencode / pi</code>
         </div>
       </div>
       <div class="qs-step">
         <div class="qs-step-num">2</div>
         <div class="qs-step-content">
-          <h4>配置 Provider</h4>
-          <code>opencode &rarr; /connect &rarr; 选择 OpenAI/Anthropic/DeepSeek &rarr; 粘贴 API Key</code>
+          <h4>安装 Paseo CLI</h4>
+          <code>npm install -g @getpaseo/cli &amp;&amp; paseo</code>
         </div>
       </div>
       <div class="qs-step">
         <div class="qs-step-num">3</div>
         <div class="qs-step-content">
-          <h4>初始化项目</h4>
-          <code>cd /path/to/project &amp;&amp; opencode &amp;&amp; /init</code>
+          <h4>运行第一个 Agent</h4>
+          <code>paseo run --provider claude "分析这个项目的结构"</code>
         </div>
       </div>
       <div class="qs-step">
         <div class="qs-step-num">4</div>
         <div class="qs-step-content">
-          <h4>非交互运行（脚本化）</h4>
-          <code>opencode run --auto --model anthropic/claude-sonnet-4 "分析代码结构"</code>
+          <h4>创建工作树工作区</h4>
+          <code>paseo run --new-workspace worktree --worktree-mode branch-off --new-branch feature/x --base origin/main "实现功能"</code>
         </div>
       </div>
       <div class="qs-step">
         <div class="qs-step-num">5</div>
         <div class="qs-step-content">
-          <h4>切换 Plan 模式（只读分析）</h4>
-          <code>opencode &rarr; &lt;Tab&gt; &rarr; 描述任务需求</code>
+          <h4>手机连接（可选）</h4>
+          <code>paseo daemon pair  # 启用中继并生成二维码</code>
         </div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- Footer -->
 <footer class="footer">
-  <p>&copy; 2026 Paseo Guides · 社区驱动 · <a href="https://opencode.ai">opencode.ai</a></p>
+  <p>&copy; 2026 Paseo Guides · 社区驱动 · <a href="https://paseo.sh">paseo.sh</a> · <a href="https://github.com/getpaseo/paseo">GitHub</a></p>
 </footer>
 
 <script>
-// Scroll animation observer
-const observer = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      entry.target.classList.add('visible');
-    }
-  });
-}, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
-
-document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
-
-// Nav scroll effect
-let lastScroll = 0;
-window.addEventListener('scroll', () => {
-  const nav = document.querySelector('.nav');
-  const currentScroll = window.scrollY;
-  if (currentScroll > 100) {
-    nav.style.background = 'rgba(15,15,19,0.95)';
-  } else {
-    nav.style.background = 'rgba(15,15,19,0.85)';
-  }
-  lastScroll = currentScroll;
-});
-
-// Mobile nav
-document.querySelector('.nav-toggle').addEventListener('click', () => {
-  const links = document.querySelector('.nav-links');
-  if (links.style.display === 'flex') {
-    links.style.display = 'none';
-  } else {
-    links.style.display = 'flex';
-    links.style.position = 'absolute';
-    links.style.top = '60px';
-    links.style.left = '0';
-    links.style.right = '0';
-    links.style.flexDirection = 'column';
-    links.style.padding = '20px';
-    links.style.background = 'var(--bg2)';
-    links.style.borderBottom = '1px solid var(--border)';
-    links.style.gap = '16px';
-  }
-});
-
-console.log('%c Paseo Guides ', 'background: linear-gradient(135deg, #7c6ff7, #36d6b6); color: #fff; font-size: 16px; font-weight: bold; padding: 8px 16px; border-radius: 4px;');
-console.log('社区驱动的 Paseo 使用指南 - 贡献请查看 GitHub 仓库');
+const observer=new IntersectionObserver((entries)=>{entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible')})},{threshold:0.1,rootMargin:'0px 0px -50px 0px'});
+document.querySelectorAll('.fade-in').forEach(el=>observer.observe(el));
+window.addEventListener('scroll',()=>{const n=document.querySelector('.nav');n.style.background=window.scrollY>100?'rgba(15,15,19,0.95)':'rgba(15,15,19,0.85)'});
+document.querySelector('.nav-toggle')?.addEventListener('click',()=>{const l=document.querySelector('.nav-links');if(l.style.display==='flex'){l.style.display='none'}else{l.style.display='flex';l.style.position='absolute';l.style.top='60px';l.style.left='0';l.style.right='0';l.style.flexDirection='column';l.style.padding='20px';l.style.background='var(--bg2)';l.style.borderBottom='1px solid var(--border)';l.style.gap='16px'}});
 </script>
-
 </body>
 </html>
