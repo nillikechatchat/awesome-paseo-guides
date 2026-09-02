@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Paseo Guides - 智能代理编排平台</title>
+<title>Paseo Guides - OpenCode 智能代理平台</title>
 <style>
 :root {
   --bg: #0f0f13;
@@ -542,7 +542,7 @@ section {
     </div>
   </div>
   <div class="hero-visual">
-    <pre><span class="code-line"><span class="code-comment"># 一行命令创建智能代理</span></span><span class="code-line"><span class="code-cmd">paseo</span> <span class="code-flag">run</span> <span class="code-flag">--provider</span> <span class="code-accent">codex/gpt-5.4</span> <span class="code-flag">--workspace</span> <span class="code-accent">&lt;id&gt;</span> <span class="code-flag">"分析这个仓库的结构并生成报告"</span></span><span class="code-line"></span><span class="code-line"><span class="code-comment"># 结果</span></span><span class="code-line"><span class="code-output">✓ Agent #a3f2 created &amp; started</span></span><span class="code-line"><span class="code-output">✓ Workspace ws-01 mounted (worktree)</span></span><span class="code-line"><span class="code-output">✓ Notifying on finish...</span></span></pre>
+    <pre><span class="code-line"><span class="code-comment"># 非交互运行 — 脚本化、自动化、一键执行</span></span><span class="code-line"><span class="code-cmd">opencode</span> <span class="code-flag">run</span> <span class="code-flag">--model</span> <span class="code-accent">anthropic/claude-sonnet-4</span> <span class="code-flag">"分析这个仓库的结构并生成报告"</span></span><span class="code-line"></span><span class="code-line"><span class="code-comment"># 带参数</span></span><span class="code-line"><span class="code-cmd">opencode</span> <span class="code-flag">run</span> <span class="code-flag">--auto</span> <span class="code-flag">--agent</span> <span class="code-accent">plan</span> <span class="code-flag">--file</span> <span class="code-accent">./src/index.ts</span> <span class="code-flag">"审查并重构"</span></span><span class="code-line"></span><span class="code-line"><span class="code-comment"># 结果</span></span><span class="code-line"><span class="code-output">✓ Session created</span></span><span class="code-line"><span class="code-output">✓ Agent plan selected (read-only)</span></span><span class="code-line"><span class="code-output">✓ Auto-approve enabled</span></span><span class="code-line"><span class="code-output">→ 正在分析仓库结构...</span></span></pre>
   </div>
 </section>
 
@@ -556,39 +556,39 @@ section {
   <div class="features-grid">
     <div class="feature-card fade-in">
       <div class="feature-icon">&#9889;</div>
-      <h3>智能代理 (Agents)</h3>
-      <p>创建、调度、管理多代理协作。支持不同 LLM 提供商，通过 Prompt 定义任务并异步追踪结果。</p>
-      <span class="feature-tag">MCP / CLI</span>
+      <h3>TUI 终端界面</h3>
+      <p>15 个斜杠命令，@ 文件引用，Tab 切换 Agent，图片拖拽，undo/redo 等操作。完整终端编码体验。</p>
+      <span class="feature-tag">TUI</span>
     </div>
     <div class="feature-card fade-in">
-      <div class="feature-icon">&#128202;</div>
-      <h3>工作区 (Workspaces)</h3>
-      <p>基于本地目录或 git worktree 的隔离环境。支持 branch-off / checkout-branch / checkout-pr 模式。</p>
-      <span class="feature-tag">隔离执行</span>
+      <div class="feature-icon">&#127760;</div>
+      <h3>75+ LLM Provider</h3>
+      <p>OpenAI、Anthropic、DeepSeek、Google Vertex AI、Amazon Bedrock、Ollama 本地模型等全支持。</p>
+      <span class="feature-tag">Provider</span>
     </div>
     <div class="feature-card fade-in">
-      <div class="feature-icon">&#9201;</div>
-      <h3>定时任务 (Schedules)</h3>
-      <p>基于 cron 表达式的定时调度，周期性自动启动新代理执行任务，支持暂停、恢复和一次性触发。</p>
-      <span class="feature-tag">Cron</span>
+      <div class="feature-icon">&#128101;</div>
+      <h3>多 Agent 协作</h3>
+      <p>Build/Plan 主代理，General/Explore/Scout 子代理，自定义 Agent 配置，@ 提及调用。</p>
+      <span class="feature-tag">Agents</span>
     </div>
     <div class="feature-card fade-in">
-      <div class="feature-icon">&#128155;</div>
-      <h3>心跳提醒 (Heartbeats)</h3>
-      <p>定时向你发送提醒消息，适合 PR 检查、构建监控、状态轮询等需要回传到对话的场景。</p>
-      <span class="feature-tag">推送通知</span>
+      <div class="feature-icon">&#128274;</div>
+      <h3>细粒度权限</h3>
+      <p>allow/ask/deny 三层控制，glob 模式匹配，按 Agent 覆盖，auto mode 一键放行。</p>
+      <span class="feature-tag">Permissions</span>
     </div>
     <div class="feature-card fade-in">
       <div class="feature-icon">&#128268;</div>
-      <h3>插件系统 (Plugins)</h3>
-      <p>通过 paseo.json 配置可扩展能力，自定义 workspace 脚本生命周期，集成第三方工具链。</p>
-      <span class="feature-tag">可扩展</span>
+      <h3>插件与自定义工具</h3>
+      <p>JS/TS 插件系统，事件 Hook，Zod 自定义工具，30+ 社区插件可用。</p>
+      <span class="feature-tag">Plugins</span>
     </div>
     <div class="feature-card fade-in">
       <div class="feature-icon">&#128269;</div>
-      <h3>终端管理 (Terminals)</h3>
-      <p>远程终端会话管理，支持长驻进程、实时交互，与 workspace script 深度集成。</p>
-      <span class="feature-tag">远程 Shell</span>
+      <h3>MCP 协议集成</h3>
+      <p>本地/远程 MCP 服务器，OAuth 自动认证，Sentry/Context7/Grep 等开箱即用。</p>
+      <span class="feature-tag">MCP</span>
     </div>
   </div>
 </section>
@@ -604,26 +604,26 @@ section {
     <div class="tutorial-item fade-in">
       <div class="tutorial-num">01</div>
       <div class="tutorial-content">
-        <h3>快速开始：创建你的第一个代理</h3>
-        <p>安装 Paseo CLI，配置 Provider，运行第一个智能代理任务</p>
-        <div class="tutorial-meta"><span>入门</span><span>10 分钟</span><span>CLI</span></div>
+        <h3>安装与首次启动</h3>
+        <p>curl/npm/Homebrew/Docker 多种安装方式，/connect 配置 Provider，/init 初始化项目</p>
+        <div class="tutorial-meta"><span>入门</span><span>10 分钟</span><span>安装</span></div>
       </div>
       <div class="tutorial-arrow">&#8594;</div>
     </div>
     <div class="tutorial-item fade-in">
       <div class="tutorial-num">02</div>
       <div class="tutorial-content">
-        <h3>工作区编排：管理代码执行环境</h3>
-        <p>创建本地 / worktree 工作区，理解隔离模式和生命周期</p>
-        <div class="tutorial-meta"><span>入门</span><span>15 分钟</span><span>Workspaces</span></div>
+        <h3>AGENTS.md 规则配置</h3>
+        <p>项目级/全局规则，/init 自动生成，instructions 外部引用，Claude Code 兼容</p>
+        <div class="tutorial-meta"><span>入门</span><span>10 分钟</span><span>Rules</span></div>
       </div>
       <div class="tutorial-arrow">&#8594;</div>
     </div>
     <div class="tutorial-item fade-in">
       <div class="tutorial-num">03</div>
       <div class="tutorial-content">
-        <h3>多代理协作与任务委派</h3>
-        <p>创建子代理，发送后续指令，实现复杂任务的分解与协作</p>
+        <h3>Agent 配置与多 Agent 协作</h3>
+        <p>Build/Plan 主代理，General/Explore/Scout 子代理，JSON/Markdown 配置，权限控制</p>
         <div class="tutorial-meta"><span>进阶</span><span>20 分钟</span><span>Agents</span></div>
       </div>
       <div class="tutorial-arrow">&#8594;</div>
@@ -631,27 +631,63 @@ section {
     <div class="tutorial-item fade-in">
       <div class="tutorial-num">04</div>
       <div class="tutorial-content">
-        <h3>定时任务与心跳配置</h3>
-        <p>使用 cron 表达式配置 Schedule 和 Heartbeat，实现自动化运维</p>
-        <div class="tutorial-meta"><span>进阶</span><span>15 分钟</span><span>Schedules</span></div>
+        <h3>权限管理系统</h3>
+        <p>allow/ask/deny 三层控制，glob 模式匹配，外部目录权限，auto mode</p>
+        <div class="tutorial-meta"><span>进阶</span><span>15 分钟</span><span>Permissions</span></div>
       </div>
       <div class="tutorial-arrow">&#8594;</div>
     </div>
     <div class="tutorial-item fade-in">
       <div class="tutorial-num">05</div>
       <div class="tutorial-content">
-        <h3>Workspace 脚本与插件开发</h3>
-        <p>配置 paseo.json 脚本，构建可复用的 workspace 能力</p>
-        <div class="tutorial-meta"><span>高级</span><span>25 分钟</span><span>Plugins</span></div>
+        <h3>MCP 服务器集成</h3>
+        <p>本地/远程 MCP，OAuth 认证，Sentry/Context7/Grep 实战，glob 工具管理</p>
+        <div class="tutorial-meta"><span>高级</span><span>20 分钟</span><span>MCP</span></div>
       </div>
       <div class="tutorial-arrow">&#8594;</div>
     </div>
     <div class="tutorial-item fade-in">
       <div class="tutorial-num">06</div>
       <div class="tutorial-content">
-        <h3>Provider 配置与模型选择策略</h3>
-        <p>深入了解 Agent Profiles、Provider Discovery 和模型能力检查</p>
-        <div class="tutorial-meta"><span>高级</span><span>20 分钟</span><span>Providers</span></div>
+        <h3>插件开发指南</h3>
+        <p>插件生命周期，事件 Hook，自定义工具，通知/.env 保护/compaction 实战</p>
+        <div class="tutorial-meta"><span>高级</span><span>25 分钟</span><span>Plugins</span></div>
+      </div>
+      <div class="tutorial-arrow">&#8594;</div>
+    </div>
+    <div class="tutorial-item fade-in">
+      <div class="tutorial-num">07</div>
+      <div class="tutorial-content">
+        <h3>自定义工具开发</h3>
+        <p>Zod 参数验证，TypeScript/JavaScript 定义，Python 脚本调用，多工具单文件</p>
+        <div class="tutorial-meta"><span>高级</span><span>15 分钟</span><span>Tools</span></div>
+      </div>
+      <div class="tutorial-arrow">&#8594;</div>
+    </div>
+    <div class="tutorial-item fade-in">
+      <div class="tutorial-num">08</div>
+      <div class="tutorial-content">
+        <h3>CLI 命令完整参考</h3>
+        <p>run/serve/web/agent/mcp/session/stats 全部命令，参数详解，环境变量清单</p>
+        <div class="tutorial-meta"><span>参考</span><span>10 分钟</span><span>CLI</span></div>
+      </div>
+      <div class="tutorial-arrow">&#8594;</div>
+    </div>
+    <div class="tutorial-item fade-in">
+      <div class="tutorial-num">09</div>
+      <div class="tutorial-content">
+        <h3>Provider 与模型配置</h3>
+        <p>75+ Provider，Ollama/LM Studio 本地模型，云网关，blacklist/whitelist</p>
+        <div class="tutorial-meta"><span>参考</span><span>15 分钟</span><span>Providers</span></div>
+      </div>
+      <div class="tutorial-arrow">&#8594;</div>
+    </div>
+    <div class="tutorial-item fade-in">
+      <div class="tutorial-num">10</div>
+      <div class="tutorial-content">
+        <h3>社区生态与实战组合</h3>
+        <p>30+ 社区插件，13 个项目，awesome-opencode，安全审计/高效开发/后台自动化场景</p>
+        <div class="tutorial-meta"><span>实践</span><span>15 分钟</span><span>Ecosystem</span></div>
       </div>
       <div class="tutorial-arrow">&#8594;</div>
     </div>
@@ -667,45 +703,68 @@ section {
   </div>
   <div class="plugins-grid">
     <div class="plugin-card fade-in">
-      <h3>&#127775; Hello World Plugin</h3>
-      <p>最基础的 Paseo 插件模板，展示 paseo.json 配置和 RPC 定义</p>
+      <h3>&#127775; .env 保护插件</h3>
+      <p>防止 LLM 读取 .env 文件中的密钥，保护敏感配置</p>
       <div class="plugin-tags">
-        <span class="plugin-tag">template</span>
-        <span class="plugin-tag">paseo.json</span>
-        <span class="plugin-tag">MCP</span>
+        <span class="plugin-tag">security</span>
+        <span class="plugin-tag">hook</span>
+        <span class="plugin-tag">tool.execute.before</span>
       </div>
-      <div class="plugin-code"><span class="k">{"name"</span>: <span class="s">"hello-world"</span>,
-  <span class="k">"description"</span>: <span class="s">"基础问候插件"</span>,
-  <span class="k">"rpc"</span>: [<span class="s">"hello"</span>],
-  <span class="k">"version"</span>: <span class="s">"1.0.0"</span>}</div>
+      <div class="plugin-code"><span class="k">export const</span> EnvProtection = async ctx =&gt; ({
+  <span class="k">"tool.execute.before"</span>: async (input, output) =&gt; {
+    <span class="k">if</span> (input.tool === <span class="s">"read"</span> &amp;&amp;
+        output.args.filePath.includes(<span class="s">".env"</span>)) {
+      <span class="k">throw new</span> Error(<span class="s">"禁止读取 .env"</span>)
+    }
+  }
+})</div>
     </div>
     <div class="plugin-card fade-in">
-      <h3>&#128221; Logger Plugin</h3>
-      <p>日志记录插件，展示如何在工作区中记录代理活动</p>
+      <h3>&#9989; 通知插件</h3>
+      <p>会话完成时通过系统通知提醒，支持 macOS 和 Linux</p>
       <div class="plugin-tags">
-        <span class="plugin-tag">logging</span>
-        <span class="plugin-tag">workspace</span>
-        <span class="plugin-tag">monitoring</span>
+        <span class="plugin-tag">notification</span>
+        <span class="plugin-tag">session.idle</span>
+        <span class="plugin-tag">osascript</span>
       </div>
-      <div class="plugin-code"><span class="k">{"name"</span>: <span class="s">"logger"</span>,
-  <span class="k">"description"</span>: <span class="s">"代理日志记录"</span>,
-  <span class="k">"scripts"</span>: {
-    <span class="k">"log"</span>: <span class="s">"node logger.js"</span>
+      <div class="plugin-code"><span class="k">export const</span> Notify = async ctx =&gt; ({
+  event: async ({ event }) =&gt; {
+    <span class="k">if</span> (event.type === <span class="s">"session.idle"</span>) {
+      <span class="k">await</span> $`osascript -e 'display notification "完成！"'`
+    }
+  }
+})</div>
+    </div>
+    <div class="plugin-card fade-in">
+      <h3>&#128295; 自定义工具</h3>
+      <p>用 Zod 定义参数，LLM 自动调用你编写的工具函数</p>
+      <div class="plugin-tags">
+        <span class="plugin-tag">tool</span>
+        <span class="plugin-tag">Zod</span>
+        <span class="plugin-tag">custom-tools</span>
+      </div>
+      <div class="plugin-code"><span class="k">import {</span> tool <span class="k">from</span> <span class="s">"@opencode-ai/plugin"</span>
+<span class="k">export default</span> tool({
+  description: <span class="s">"查询项目数据库"</span>,
+  args: {
+    query: tool.schema.string()
   },
-  <span class="k">"version"</span>: <span class="s">"1.0.0"</span>}</div>
+  <span class="k">async</span> execute(args) {
+    <span class="k">return</span> <span class="s">`已执行: ${args.query}`</span>
+  }
+})</div>
     </div>
     <div class="plugin-card fade-in">
-      <h3>&#9889; DevOps Runner</h3>
-      <p>DevOps 任务插件，自动化 CI/CD 步骤执行</p>
+      <h3>&#128202; Helicone 会话跟踪</h3>
+      <p>自动注入 Helicone 头，按会话分组 LLM 请求，便于分析</p>
       <div class="plugin-tags">
-        <span class="plugin-tag">devops</span>
-        <span class="plugin-tag">ci/cd</span>
-        <span class="plugin-tag">automation</span>
+        <span class="plugin-tag">observability</span>
+        <span class="plugin-tag">helicone</span>
+        <span class="plugin-tag">session</span>
       </div>
-      <div class="plugin-code"><span class="k">{"name"</span>: <span class="s">"devops-runner"</span>,
-  <span class="k">"description"</span>: <span class="s">"DevOps 自动化"</span>,
-  <span class="k">"rpc"</span>: [<span class="s">"deploy"</span>, <span class="s">"build"</span>],
-  <span class="k">"version"</span>: <span class="s">"1.0.0"</span>}</div>
+      <div class="plugin-code">npm install -g opencode-helicone-session
+
+<span class="k">{"plugin"</span>: [<span class="s">"opencode-helicone-session"</span>]}</div>
     </div>
   </div>
 </section>
@@ -719,87 +778,87 @@ section {
   </div>
   <div class="experiences-grid">
     <div class="exp-card fade-in">
-      <div class="quote">"用 Paseo 做 PR 自动审阅后，代码质量明显提升。最爽的是可以设置 heartbeat，在 build 失败时主动通知我，不用一直盯着。"</div>
+      <div class="quote">"Plan 模式是我最喜欢的功能。切到 Plan 后先让 AI 分析架构，确认方案没问题再切回 Build 执行。以前经常让 AI 直接改代码结果方向错了，现在基本不会了。"</div>
       <div class="author">
         <div class="avatar">Z</div>
         <div class="author-info">
           <div class="author-name">张明</div>
-          <div class="author-role">后端工程师 · 1 年经验</div>
+          <div class="author-role">后端工程师</div>
         </div>
       </div>
       <div class="exp-tags">
-        <span class="plugin-tag">PR 审阅</span>
-        <span class="plugin-tag">Heartbeat</span>
+        <span class="plugin-tag">Plan Mode</span>
+        <span class="plugin-tag">Agent</span>
       </div>
     </div>
     <div class="exp-card fade-in">
-      <div class="quote">"多代理协作真的改变了我的工作流。我把一个复杂重构拆成 3 个子代理并行执行，比自己手动做快了一倍还不止。"</div>
+      <div class="quote">"AGENTS.md + instructions 字段让我把团队规范集中管理。新项目 fork 过来 run 一下 /init，5 分钟就有可工作的 AI 开发环境了。"</div>
       <div class="author">
         <div class="avatar">L</div>
         <div class="author-info">
           <div class="author-name">李婷</div>
-          <div class="author-role">全栈工程师 · 2 年经验</div>
+          <div class="author-role">全栈工程师</div>
         </div>
       </div>
       <div class="exp-tags">
-        <span class="plugin-tag">多代理</span>
-        <span class="plugin-tag">并行执行</span>
+        <span class="plugin-tag">AGENTS.md</span>
+        <span class="plugin-tag">/init</span>
       </div>
     </div>
     <div class="exp-card fade-in">
-      <div class="quote">"定时 Schedule 是我最喜欢的功能。每天早上自动运行代码审计，每周生成技术债报告。把重复工作完全自动化了。"</div>
+      <div class="quote">"用 opencode run --auto 在 GitHub Actions 里自动做 PR 审查。每次 push 触发，AI 自动审查并给出改进建议。"</div>
       <div class="author">
         <div class="avatar">W</div>
         <div class="author-info">
           <div class="author-name">王浩</div>
-          <div class="author-role">技术负责人 · 3 年经验</div>
+          <div class="author-role">技术负责人</div>
         </div>
       </div>
       <div class="exp-tags">
-        <span class="plugin-tag">Schedule</span>
-        <span class="plugin-tag">自动化</span>
+        <span class="plugin-tag">GitHub</span>
+        <span class="plugin-tag">CI/CD</span>
       </div>
     </div>
     <div class="exp-card fade-in">
-      <div class="quote">"第一次用时候担心工作区隔离问题，其实 worktree 模式非常稳，每个任务独立分支，不会影响主开发线。"</div>
+      <div class="quote">"MCP 集成让 AI 直接查 Sentry 和 Context7 文档。以前调试线上 bug 要切 3 个窗口，现在一句话就搞定。"</div>
       <div class="author">
         <div class="avatar">C</div>
         <div class="author-info">
           <div class="author-name">陈晨</div>
-          <div class="author-role">DevOps · 1.5 年经验</div>
+          <div class="author-role">DevOps</div>
         </div>
       </div>
       <div class="exp-tags">
-        <span class="plugin-tag">Worktree</span>
-        <span class="plugin-tag">隔离</span>
+        <span class="plugin-tag">MCP</span>
+        <span class="plugin-tag">Sentry</span>
       </div>
     </div>
     <div class="exp-card fade-in">
-      <div class="quote">"Provider 切换很方便，同一个 prompt 可以跑不同的模型对比效果。调试时切 fast_mode 速度提升明显。"</div>
+      <div class="quote">"本地用 Ollama 跑小模型做日常小改动，大模型用 Anthropic。通过 Provider 配置灵活切换，成本和速度都可控。"</div>
       <div class="author">
         <div class="avatar">S</div>
         <div class="author-info">
           <div class="author-name">孙悦</div>
-          <div class="author-role">AI 工程师 · 1 年经验</div>
+          <div class="author-role">AI 工程师</div>
         </div>
       </div>
       <div class="exp-tags">
+        <span class="plugin-tag">Ollama</span>
         <span class="plugin-tag">Provider</span>
-        <span class="plugin-tag">模型对比</span>
       </div>
     </div>
     <div class="exp-card fade-in">
-      <div class="quote">"最大的心得是学会异步工作流，不再轮询等待。通知到了自然知道结果，把等待时间用来处理别的事情。"</div>
+      <div class="quote">"权限配置太重要了。我用 glob 模式让 AI 可以 git status 但禁止 git push，既方便又安全。团队新人上手也不怕误操作。"</div>
       <div class="author">
         <div class="avatar">H</div>
         <div class="author-info">
           <div class="author-name">刘洋</div>
-          <div class="author-role">架构师 · 4 年经验</div>
+          <div class="author-role">架构师</div>
         </div>
       </div>
       <div class="exp-tags">
-        <span class="plugin-tag">异步</span>
-        <span class="plugin-tag">最佳实践</span>
+        <span class="plugin-tag">Permissions</span>
+        <span class="plugin-tag">Glob</span>
       </div>
     </div>
   </div>
@@ -817,36 +876,36 @@ section {
       <div class="qs-step">
         <div class="qs-step-num">1</div>
         <div class="qs-step-content">
-          <h4>创建项目</h4>
-          <code>paseo project create /path/to/your/repo</code>
+          <h4>安装</h4>
+          <code>curl -fsSL https://opencode.ai/install | bash</code>
         </div>
       </div>
       <div class="qs-step">
         <div class="qs-step-num">2</div>
         <div class="qs-step-content">
-          <h4>创建工作区</h4>
-          <code>paseo workspace create --isolation worktree --mode branch-off --new-branch feat-x --base main</code>
+          <h4>配置 Provider</h4>
+          <code>opencode &rarr; /connect &rarr; 选择 OpenAI/Anthropic/DeepSeek &rarr; 粘贴 API Key</code>
         </div>
       </div>
       <div class="qs-step">
         <div class="qs-step-num">3</div>
         <div class="qs-step-content">
-          <h4>运行智能代理</h4>
-          <code>paseo run --provider codex/gpt-5.4 --mode full-access --workspace &lt;id&gt; "分析代码结构"</code>
+          <h4>初始化项目</h4>
+          <code>cd /path/to/project &amp;&amp; opencode &amp;&amp; /init</code>
         </div>
       </div>
       <div class="qs-step">
         <div class="qs-step-num">4</div>
         <div class="qs-step-content">
-          <h4>配置定时任务（可选）</h4>
-          <code>paseo schedule create --cron "*/30 * * * *" "检查构建状态"</code>
+          <h4>非交互运行（脚本化）</h4>
+          <code>opencode run --auto --model anthropic/claude-sonnet-4 "分析代码结构"</code>
         </div>
       </div>
       <div class="qs-step">
         <div class="qs-step-num">5</div>
         <div class="qs-step-content">
-          <h4>查看代理列表</h4>
-          <code>paseo ls</code>
+          <h4>切换 Plan 模式（只读分析）</h4>
+          <code>opencode &rarr; &lt;Tab&gt; &rarr; 描述任务需求</code>
         </div>
       </div>
     </div>
